@@ -156,13 +156,13 @@ namespace FruitTreeTweaks
             [MethodImpl(MethodImplOptions.NoInlining)]
             public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
-                SMonitor.Log($"Transpiling FruitTree.shake", LogLevel.Alert);
+                SMonitor.Log($"Transpiling FruitTree.shake", LogLevel.Debug);
                 var codes = new List<CodeInstruction>(instructions);
 				for (int i = 0; i < codes.Count; i++)
                 {
 					if (i < codes.Count - 4 && codes[i].opcode == OpCodes.Ldloca_S && codes[i + 1].opcode == OpCodes.Ldc_R4 && codes[i + 2].opcode == OpCodes.Ldc_R4 && (float)codes[i + 1].operand == 0 && (float)codes[i + 2].operand == 0 && codes[i + 3].opcode == OpCodes.Call && (ConstructorInfo)codes[i + 3].operand == AccessTools.Constructor(typeof(Vector2), new Type[] { typeof(float), typeof(float) }) && codes[i + 4].opcode == OpCodes.Ldloc_S && codes[i + 4].operand == codes[1 + 4].operand)
                     { // im getting index out of range on above if statement after changing Ldloc_3 => Ldloc_S
-                        SMonitor.Log("replacing default fruit offset with method");
+                        SMonitor.Log("replacing default fruit offset with method", LogLevel.Debug);
                         codes.Insert(i + 4, new CodeInstruction(OpCodes.Stloc_S, 4));
                         codes.Insert(i + 4, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.GetFruitOffsetForShake))));
                         codes.Insert(i + 4, new CodeInstruction(OpCodes.Ldloc_S));
