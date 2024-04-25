@@ -15,7 +15,7 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
-using Item = StardewValley.Item;
+
 using LogLevel = StardewModdingAPI.LogLevel;
 using Object = StardewValley.Object;
 
@@ -267,11 +267,8 @@ namespace FruitTreeTweaks
 						if (!(terrainFeature2 is HoeDirt { crop: null })) { return true; }
 					}
 					location.terrainFeatures.Remove(placementTile);
-					bool canDig = location.doesTileHaveProperty((int)placementTile.X, (int)placementTile.Y, "Diggable", "back") != null;
 					string tileType = location.doesTileHaveProperty((int)placementTile.X, (int)placementTile.Y, "Type", "back");
-					string deniedMessage2;
-					bool canPlantTrees = (location.doesEitherTileOrTileIndexPropertyEqual((int)placementTile.X, (int)placementTile.Y, "CanPlantTrees", "Back", "T") || CanPlantAnywhere());
-					if ((location is Farm && (canDig || tileType == "Grass" || tileType == "Dirt" || canPlantTrees) && (!location.IsNoSpawnTile(placementTile, "Tree") || canPlantTrees)) || ((canDig || tileType == "Stone") && (location.CanPlantTreesHere(obj.ItemId, (int)placementTile.X, (int)placementTile.Y, out deniedMessage2))))
+					if ((location is Farm || CanPlantAnywhere()) && (location.CanItemBePlacedHere(placementTile) || CanPlantAnywhere()))
 					{
 						location.playSound("dirtyHit");
 						DelayedAction.playSoundAfterDelay("coin", 100);
@@ -415,14 +412,15 @@ namespace FruitTreeTweaks
                 var codes = new List<CodeInstruction>(instructions);
                 for (int i = 0; i < codes.Count; i++)
                 {
-                    if (i < codes.Count - 6 && codes[i].opcode == OpCodes.Ldfld && (FieldInfo)codes[i].operand == AccessTools.Field(typeof(FruitTree), nameof(FruitTree.fruit.Count)) && codes[i + 1].opcode == OpCodes.Ldc_I4_3 && codes[i + 2].opcode == OpCodes.Ldarg_0 && codes[i + 5].opcode == OpCodes.Ldc_I4_1 && codes[i + 6].opcode == OpCodes.Add)
+                    if (codes[i].opcode == OpCodes.Call && (MethodInfo)codes[i].operand == AccessTools.Method(typeof(FruitTree), nameof(FruitTree.TryAddFruit)))
                     {
-                        Log("replacing max fruits and fruit per day with methods");
-                        // all the codes that was here was totally wrong. the if conditional is also completely wrong
+                        Log("Replacing fruit per day with methods");
+                        //codes.RemoveAt(i); BROKEN -- CRASHES GAME. COME BACK TO THIS LATER THIS SHIT SUCKS.
+						//codes.Insert(i, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.TryAddMoreFruit))));
                     }
                     if (i < codes.Count - 3 && codes[i].opcode == OpCodes.Ldfld && (FieldInfo)codes[i].operand == AccessTools.Field(typeof(FruitTree), nameof(FruitTree.daysUntilMature)) && codes[i + 3].opcode == OpCodes.Bgt_S)
                     {
-                        SMonitor.Log("replacing daysUntilMature value with method");
+                        Log("replacing daysUntilMature value with method");
                         codes.Insert(i + 3, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.ChangeDaysToMatureCheck))));
                     }
                 }
@@ -436,6 +434,8 @@ namespace FruitTreeTweaks
 		{
 			public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
 			{
+				if (!Config.EnableMod) return instructions;
+				
 				var codes= new List<CodeInstruction>(instructions);
 				for (int i = 0; i < codes.Count; i++)
 				{
