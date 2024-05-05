@@ -11,7 +11,7 @@ namespace FruitTreeTweaks
         public bool TreesBlock { get; set; } = false;
         public bool PlantAnywhere { get; set; } = false;
         public bool PlantOnPaths { get; set; } = false;
-        public bool FruitAllSeasons { get; set; } = false;
+        public bool FruitAllSeasons { get; set; } = true;
         public int DaysUntilMature { get; set; } = 28;
         public int MaxFruitPerTree { get; set; } = 3;
         public int MinFruitPerDay { get; set; } = 1;
