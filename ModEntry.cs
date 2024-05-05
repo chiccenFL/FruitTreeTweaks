@@ -87,6 +87,8 @@ namespace FruitTreeTweaks
 		private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
         {
 
+            Log("Fruit Tree Tweaks launching with Debug enabled.", debugOnly: true);
+
             // get Generic Mod Config Menu's API (if it's installed)
             var configMenu = Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
             if (configMenu is null)
