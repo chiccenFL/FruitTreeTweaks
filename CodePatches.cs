@@ -315,7 +315,7 @@ namespace FruitTreeTweaks
 					__result = true;
 					return false;
 				}
-				Log($"canBePlacedHere handling for {tree?.DisplayName} passed to original method.", debugOnly: true);
+				LogOnce($"canBePlacedHere handling for {tree?.DisplayName} passed to original method.", debugOnly: true);
 				return true;
 			}
 
@@ -341,7 +341,7 @@ namespace FruitTreeTweaks
 					__result = true;
 					return false;
 				}
-				Log($"canBePlacedHere handling for {tree?.DisplayName} passed to original method.", debugOnly: true);
+				LogOnce($"canBePlacedHere handling for {tree?.DisplayName} passed to original method.", debugOnly: true);
 				return true;
 			}
 
@@ -369,7 +369,7 @@ namespace FruitTreeTweaks
 					__result = true;
 					return false;
 				}
-				Log($"canBePlacedHere handling for {tree?.DisplayName} passed to original method.", debugOnly: true);
+				LogOnce($"canBePlacedHere handling for {tree?.DisplayName} passed to original method.", debugOnly: true);
 				return true;
 			}
 
@@ -397,7 +397,7 @@ namespace FruitTreeTweaks
 					__result = true;
 					return false;
 				}
-				Log($"canBePlacedHere handling for {tree?.DisplayName} passed to original method.", debugOnly: true);
+				LogOnce($"canBePlacedHere handling for {tree?.DisplayName} passed to original method.", debugOnly: true);
 				return true;
 			}
 		}
