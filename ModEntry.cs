@@ -47,21 +47,42 @@ namespace FruitTreeTweaks
 
         }
 
-		/// <summary>
-		/// Small method that checks if Debug mode is enabled before Logging messages. A bit easier than writing an if/else every time.
+        /// <summary>
+		///     Small method that handles Debug mode to make SMAPI logs a bit easier to read.
 		/// </summary>
+        /// <remarks>
+        ///     Allows basic Log functions to upgrade Logs to <c>LogLevel.Debug</c> when debugging for ease of reading.<br/>
+        ///     For <b>Debug Only</b> Logs -- use <c>debugOnly: true</c> and omit <c>LogLevel</c><br/>
+        ///     For Debug Logs that <b>always</b> show -- use <c>LogLevel.Debug</c> and omit <c>debugOnly</c>.
+        /// </remarks>
 		/// <param name="message"></param>
 		/// <param name="level"></param>
 
-		public static void Log(string message, LogLevel level = LogLevel.Trace)
+        public static void Log(string message, LogLevel level = LogLevel.Trace, bool debugOnly = false)
 		{
-			if (Config.Debug) SMonitor.Log(message, level);
+			level = Config.Debug ? LogLevel.Debug : level; // if in Debug mode, upgrade LogLevel to Debug. Otherwise, let it stay as it was.
+            if (!debugOnly) SMonitor.Log(message, level); // so long as this isn't already a debug log, push log with/without Debug upgrade
+            else if (debugOnly && Config.Debug) SMonitor.Log(message, level); // was gonna make this just else, but I prob did this inefficiently
+            else return; // if it is debugOnly and Config.Debug != true, don't send it. clean up those SMAPI logs
 		}
 
-		public static void LogOnce(string message, LogLevel level = LogLevel.Trace)
+        /// <summary>
+		///     Small method that handles Debug mode to make SMAPI logs a bit easier to read.
+		/// </summary>
+        /// <remarks>
+        ///     Allows basic Log functions to upgrade Logs to <c>LogLevel.Debug</c> when debugging for ease of reading.<br/>
+        ///     For <b>Debug Only</b> Logs -- use <c>debugOnly: true</c> and omit <c>LogLevel</c><br/>
+        ///     For Debug Logs that <b>always</b> show -- use <c>LogLevel.Debug</c> and omit <c>debugOnly</c>.
+        /// </remarks>
+		/// <param name="message"></param>
+		/// <param name="level"></param>
+		public static void LogOnce(string message, LogLevel level = LogLevel.Trace, bool debugOnly = true) // all Log() comments apply here as functions are nearly identical
 		{
-			if (Config.Debug) SMonitor.LogOnce(message, level);
-		}
+            level = Config.Debug ? LogLevel.Debug : level;
+            if (!debugOnly) SMonitor.LogOnce(message, level);
+            if (debugOnly && Config.Debug) SMonitor.LogOnce(message, level);
+            else return;
+        }
 
 		private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
         {
@@ -84,6 +105,7 @@ namespace FruitTreeTweaks
                 getValue: () => Config.EnableMod,
                 setValue: value => Config.EnableMod = value
             );
+            Log($"Mod enabled: {Config.EnableMod}", debugOnly: true);
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => "Crops Block",
@@ -91,6 +113,7 @@ namespace FruitTreeTweaks
                 getValue: () => Config.CropsBlock,
                 setValue: value => Config.CropsBlock = value
             );
+            Log($"Crops block: {Config.CropsBlock}", debugOnly: true);
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => "Trees Block",
@@ -98,6 +121,7 @@ namespace FruitTreeTweaks
                 getValue: () => Config.TreesBlock,
                 setValue: value => Config.TreesBlock = value
             );
+            Log($"Trees block: {Config.TreesBlock}", debugOnly: true);
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => "Objects Block",
@@ -105,6 +129,7 @@ namespace FruitTreeTweaks
                 getValue: () => Config.ObjectsBlock,
                 setValue: value => Config.ObjectsBlock = value
             );
+            Log($"Objects block: {Config.ObjectsBlock}", debugOnly: true);
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => "Plant Anywhere",
@@ -112,6 +137,7 @@ namespace FruitTreeTweaks
                 getValue: () => Config.PlantAnywhere,
                 setValue: value => Config.PlantAnywhere = value
             );
+            Log($"Plant Anywhere: {Config.PlantAnywhere}", debugOnly: true);
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => "Fruit All Seasons",
@@ -119,18 +145,21 @@ namespace FruitTreeTweaks
                 getValue: () => Config.FruitAllSeasons,
                 setValue: value => Config.FruitAllSeasons = value
             );
+            Log($"Fruit All Seasons: {Config.FruitAllSeasons}", debugOnly: true);
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => "Max Fruit / Tree",
                 getValue: () => Config.MaxFruitPerTree,
                 setValue: value => Config.MaxFruitPerTree = value
             );
+            Log($"Max Fruit / Tree: {Config.MaxFruitPerTree}", debugOnly: true);
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => "Days to Mature",
                 getValue: () => Config.DaysUntilMature,
                 setValue: value => Config.DaysUntilMature = value
             );
+            Log($"Days to Mature: {Config.DaysUntilMature}", debugOnly: true);
             /* edge-case bug where if a user changes these numbers, it causes the age to increase by odd factors. I had set min/max both to 4 and the planted a tree, and that tree was instantly 3 days old somehow.
             configMenu.AddNumberOption(
                 mod: ModManifest,
@@ -143,7 +172,7 @@ namespace FruitTreeTweaks
                 name: () => "Max Fruit / Day",
                 getValue: () => Config.MaxFruitPerDay,
                 setValue: value => Config.MaxFruitPerDay = value
-            ); so yeah, keep this commented out until that bug is patched so users don't accidentally break their shit over a feature that doesn't even work right now anyway */
+            );
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => "Color Variation",
@@ -151,6 +180,7 @@ namespace FruitTreeTweaks
                 getValue: () => Config.ColorVariation,
                 setValue: value => Config.ColorVariation = value
             );
+            Log($"Color Variation: {Config.EnableMod}", debugOnly: true);
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => "Size Variation %",
@@ -173,7 +203,7 @@ namespace FruitTreeTweaks
                 tooltip: () => "Top and bottom border on the canopy to limit fruit spawn locations",
                 getValue: () => Config.FruitSpawnBufferY,
                 setValue: value => Config.FruitSpawnBufferY = value
-            );
+            ); these last 4 are just out because FruitTree.draw_Patch isn't working right now anyway, so it's a bit silly being there when it does nothing atm. */
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => "Days Until Silver",
@@ -181,6 +211,7 @@ namespace FruitTreeTweaks
                 getValue: () => Config.DaysUntilSilverFruit,
                 setValue: value => Config.DaysUntilSilverFruit = value
             );
+            Log($"Days until Silver: {Config.DaysUntilSilverFruit}", debugOnly: true);
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => "Days Until Gold",
@@ -188,6 +219,7 @@ namespace FruitTreeTweaks
                 getValue: () => Config.DaysUntilGoldFruit,
                 setValue: value => Config.DaysUntilGoldFruit = value
             );
+            Log($"Days until Gold: {Config.DaysUntilGoldFruit}", debugOnly: true);
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => "Days Until Iridium",
@@ -195,13 +227,15 @@ namespace FruitTreeTweaks
                 getValue: () => Config.DaysUntilIridiumFruit,
                 setValue: value => Config.DaysUntilIridiumFruit = value
             );
-			configMenu.AddBoolOption(
+            Log($"Days until Iridium: {Config.DaysUntilIridiumFruit}", debugOnly: true);
+            configMenu.AddBoolOption(
 				mod: ModManifest,
-				name: () => "Debug Outputs",
-				tooltip: () => "Enable this for debugging or if generating SMAPI log for mod help or troubleshooting",
+				name: () => "Debug Logs",
+				tooltip: () => "Enable this if generating SMAPI log for a bug report or troubleshooting. Gives more verbose SMAPI logs.",
 				getValue: () => Config.Debug,
 				setValue: value => Config.Debug = value
 			);
-		}
+            Log($"Debug: Well you're reading this, aren't you?", debugOnly: true); // xaxaxa
+        }
     }
 }
