@@ -8,6 +8,16 @@ using System.Security.Cryptography.X509Certificates;
 using System.Linq;
 using StardewValley.ItemTypeDefinitions;
 
+/***
+ * TO DO:
+ * Fix min/max Fruit Per Day, and Fruit Per Day in general
+ * Fix bug that causes Fruit Per Day values to multiply how fast a tree ages (e.g. min/max = 4 made tree age -3 the day after it was planted)
+ * Fix draw so you can see more than 3 fruit
+ * Fix chopped down fruit tree producing sapling of equal quality to the fruit that tree had produced.
+ * Change how debug Logging works so toggling Debug in Config makes all Trace logs Debug logs instead.
+ * For fun: see if you can change it so trees can be placed on top of paths
+***/
+
 namespace FruitTreeTweaks
 {
     /// <summary>The mod entry point.</summary>
@@ -121,6 +131,7 @@ namespace FruitTreeTweaks
                 getValue: () => Config.DaysUntilMature,
                 setValue: value => Config.DaysUntilMature = value
             );
+            /* edge-case bug where if a user changes these numbers, it causes the age to increase by odd factors. I had set min/max both to 4 and the planted a tree, and that tree was instantly 3 days old somehow.
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => "Min Fruit / Day",
@@ -132,7 +143,7 @@ namespace FruitTreeTweaks
                 name: () => "Max Fruit / Day",
                 getValue: () => Config.MaxFruitPerDay,
                 setValue: value => Config.MaxFruitPerDay = value
-            );
+            ); so yeah, keep this commented out until that bug is patched so users don't accidentally break their shit over a feature that doesn't even work right now anyway */
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => "Color Variation",
