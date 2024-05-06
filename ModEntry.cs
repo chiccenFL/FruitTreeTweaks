@@ -135,7 +135,7 @@ namespace FruitTreeTweaks
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => "Plant Anywhere",
-                tooltip: () => "Remove tile and map restrictions",
+                tooltip: () => "Remove map restrictions",
                 getValue: () => Config.PlantAnywhere,
                 setValue: value => Config.PlantAnywhere = value
             );
@@ -143,9 +143,17 @@ namespace FruitTreeTweaks
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => "Fruit All Seasons",
-                tooltip: () => "Except winter, duh",
+                tooltip: () => "Excludes Winter",
                 getValue: () => Config.FruitAllSeasons,
                 setValue: value => Config.FruitAllSeasons = value
+            );
+            Log($"Fruit In Winter: {Config.FruitInWinter}", debugOnly: true);
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Fruit In Winter",
+                tooltip: () => "Expands Fruit All Seasons to include Winter. Fruit All Seasons must be enabled.",
+                getValue: () => Config.FruitInWinter,
+                setValue: value => Config.FruitInWinter = value
             );
             Log($"Fruit All Seasons: {Config.FruitAllSeasons}", debugOnly: true);
             configMenu.AddNumberOption(
@@ -238,6 +246,14 @@ namespace FruitTreeTweaks
 				setValue: value => Config.Debug = value
 			);
             Log($"Debug: Well you're reading this, aren't you?", debugOnly: true); // xaxaxa
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "God Mode",
+                tooltip: () => "WARNING: EXTREMELY DANGEROUS SETTING TO ENABLE. This setting will let you place fruit trees ANYWHERE, even ridiculous locations. It bypasses ALL collision checks. Enable at your own risk!",
+                getValue: () => Config.GodMode,
+                setValue: value => Config.GodMode = value
+            );
+            Log($"God Mode: {Config.GodMode}", debugOnly: true);
         }
     }
 }
