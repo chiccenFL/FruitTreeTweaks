@@ -23,7 +23,7 @@ namespace FruitTreeTweaks
 {
     public partial class ModEntry
     {
-        [HarmonyPatch(typeof(FruitTree), new Type[] { typeof(string), typeof(int) })]
+        [HarmonyPatch(typeof(FruitTree), new Type[] { typeof(string), typeof(int) })] // aedenthorn
         [HarmonyPatch(MethodType.Constructor)]
         public class FruitTree__Patch1
         {
@@ -35,7 +35,7 @@ namespace FruitTreeTweaks
                 SMonitor.Log($"New fruit tree: set days until mature to {Config.DaysUntilMature}");
             }
         }
-        [HarmonyPatch(typeof(FruitTree), new Type[] { typeof(string), typeof(int) })]
+        [HarmonyPatch(typeof(FruitTree), new Type[] { typeof(string), typeof(int) })] // aedenthorn
         [HarmonyPatch(MethodType.Constructor)]
         public class FruitTree__Patch2
         {
@@ -48,19 +48,23 @@ namespace FruitTreeTweaks
             }
         }
 
-        [HarmonyPatch(typeof(FruitTree), nameof(FruitTree.IsInSeasonHere))]
+        [HarmonyPatch(typeof(FruitTree), nameof(FruitTree.IsInSeasonHere))] // aedenthorn
         public class FruitTree_IsInSeasonHere_Patch
         {
             public static bool Prefix(ref bool __result)
             {
-                if (!Config.EnableMod || !Config.FruitAllSeasons)
+				/*
+				if (!Config.EnableMod || !Config.FruitAllSeasons)
                     return true;
                 __result = !Game1.IsWinter;
                 return false;
+				*/
+				__result = (Config.EnableMod && Config.FruitAllSeasons && (!Game1.IsWinter || Config.FruitInWinter));
+				return !__result;
             }
         }
         
-        [HarmonyPatch(typeof(FruitTree), nameof(FruitTree.IsGrowthBlocked))]
+        [HarmonyPatch(typeof(FruitTree), nameof(FruitTree.IsGrowthBlocked))] // aedenthorn
         public class FruitTree_IsGrowthBlocked_Patch
         {
             public static bool Prefix(FruitTree __instance, Vector2 tileLocation, GameLocation environment, ref bool __result)
@@ -97,7 +101,7 @@ namespace FruitTreeTweaks
 
 
 
-        [HarmonyPatch(typeof(FruitTree), nameof(FruitTree.draw), new Type[] { typeof(SpriteBatch) })]
+        [HarmonyPatch(typeof(FruitTree), nameof(FruitTree.draw), new Type[] { typeof(SpriteBatch) })] // aedenthorn
         public class FruitTree_draw_Patch
         {
             public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
@@ -150,7 +154,7 @@ namespace FruitTreeTweaks
             }
         }
 
-        [HarmonyPatch(typeof(FruitTree), nameof(FruitTree.shake))]
+        [HarmonyPatch(typeof(FruitTree), nameof(FruitTree.shake))] // aedenthorn
         public class FruitTree_shake_Patch
         {
             [MethodImpl(MethodImplOptions.NoInlining)]
@@ -175,7 +179,7 @@ namespace FruitTreeTweaks
             }
         }
 
-		[HarmonyPatch(typeof(FruitTree), nameof(FruitTree.GetQuality))]
+		[HarmonyPatch(typeof(FruitTree), nameof(FruitTree.GetQuality))] // chiccen
 		public class FruitTree_GetQuality_Patch
 		{
 			/* Holding on to this for future use. It's easy to write but I don't want to memorize those damn op codes again.
@@ -269,7 +273,7 @@ namespace FruitTreeTweaks
 					}
 					location.terrainFeatures.Remove(placementTile);
 					string tileType = location.doesTileHaveProperty((int)placementTile.X, (int)placementTile.Y, "Type", "back");
-					if ((location is Farm || CanPlantAnywhere()) && (location.CanItemBePlacedHere(placementTile) || CanPlantAnywhere()))
+					if ((location is Farm && location.CanItemBePlacedHere(placementTile)) || CanPlantAnywhere())
 					{
 						location.playSound("dirtyHit");
 						DelayedAction.playSoundAfterDelay("coin", 100);
@@ -280,7 +284,7 @@ namespace FruitTreeTweaks
 						};
 						location.terrainFeatures.Add(placementTile, fruitTree);
 						__result = true;
-						LogOnce($"{obj?.DisplayName} made it through all checks and should be good to place!", debugOnly: true);
+						LogOnce($"{obj?.DisplayName} made it through all checks and should be good to place!");
 						return false;
 					}
 				}
@@ -289,7 +293,7 @@ namespace FruitTreeTweaks
             }
         }
 
-		[HarmonyPatch(typeof(Object), nameof(Object.canBePlacedHere))]
+		[HarmonyPatch(typeof(Object), nameof(Object.canBePlacedHere))] // chiccen
 		public class Object_canBePlacedHere_Patch
 		{
 
@@ -403,7 +407,7 @@ namespace FruitTreeTweaks
 		}
 
 
-		[HarmonyPatch(typeof(FruitTree), nameof(FruitTree.dayUpdate))]
+		[HarmonyPatch(typeof(FruitTree), nameof(FruitTree.dayUpdate))] // aedenthorn
         public class FruitTree_dayUpdate_Patch
         {
             public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
@@ -429,7 +433,7 @@ namespace FruitTreeTweaks
             }
         }
 
-		[HarmonyPatch(typeof(FruitTree), nameof(FruitTree.TryAddFruit))]
+		[HarmonyPatch(typeof(FruitTree), nameof(FruitTree.TryAddFruit))] // chiccen
 		public class FruitTree_TryAddFruit_Patch
 		{
 			public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
