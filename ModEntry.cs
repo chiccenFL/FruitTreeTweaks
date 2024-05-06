@@ -51,9 +51,9 @@ namespace FruitTreeTweaks
 		///     Small method that handles Debug mode to make SMAPI logs a bit easier to read.
 		/// </summary>
         /// <remarks>
-        ///     Allows basic Log functions to upgrade Logs to <c>LogLevel.Debug</c> when debugging for ease of reading.<br/>
-        ///     For <b>Debug Only</b> Logs -- use <c>debugOnly: true</c> and omit <c>LogLevel</c><br/>
-        ///     For Debug Logs that <b>always</b> show -- use <c>LogLevel.Debug</c> and omit <c>debugOnly</c>.
+        ///     Allows basic Log functions to upgrade Logs to <see cref="LogLevel.Debug"/> when debugging for ease of reading.<br/>
+        ///     For <b>Debug Only</b> Logs -- use <c>debugOnly: true</c> and omit <see cref="LogLevel"/><br/>
+        ///     For Debug Logs that <b>always</b> show -- use <see cref="LogLevel"/> and omit <c>debugOnly</c>.
         /// </remarks>
 		/// <param name="message"></param>
 		/// <param name="level"></param>
@@ -70,13 +70,13 @@ namespace FruitTreeTweaks
 		///     Small method that handles Debug mode to make SMAPI logs a bit easier to read.
 		/// </summary>
         /// <remarks>
-        ///     Allows basic Log functions to upgrade Logs to <c>LogLevel.Debug</c> when debugging for ease of reading.<br/>
-        ///     For <b>Debug Only</b> Logs -- use <c>debugOnly: true</c> and omit <c>LogLevel</c><br/>
-        ///     For Debug Logs that <b>always</b> show -- use <c>LogLevel.Debug</c> and omit <c>debugOnly</c>.
+        ///     Allows basic Log functions to upgrade Logs to <see cref="LogLevel.Debug"/> when debugging for ease of reading.<br/>
+        ///     For <b>Debug Only</b> Logs -- use <c>debugOnly: true</c> and omit <see cref="LogLevel"/><br/>
+        ///     For Debug Logs that <b>always</b> show -- use <see cref="LogLevel"/> and omit <c>debugOnly</c>.
         /// </remarks>
 		/// <param name="message"></param>
 		/// <param name="level"></param>
-		public static void LogOnce(string message, LogLevel level = LogLevel.Trace, bool debugOnly = true) // all Log() comments apply here as functions are nearly identical
+		public static void LogOnce(string message, LogLevel level = LogLevel.Trace, bool debugOnly = false) // all Log() comments apply here as functions are nearly identical
 		{
             level = Config.Debug ? LogLevel.Debug : level;
             if (!debugOnly) SMonitor.LogOnce(message, level);
