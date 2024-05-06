@@ -6,6 +6,7 @@ using Netcode;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData.Buildings;
+using StardewValley.Internal;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.TerrainFeatures;
 using System;
@@ -210,7 +211,8 @@ namespace FruitTreeTweaks
 			*/
 			public static bool Prefix(FruitTree __instance, ref int __result)
 			{
-				if (!Config.EnableMod || __instance.stump.Value) return true;
+				// __instance.stump.Value was used to remove quality from matured sapling, however I just found out this is not a bug but a new 1.6 feature.
+				if (!Config.EnableMod) return true;
 
 				int days = __instance.daysUntilMature.Value;
 				if (__instance.struckByLightningCountdown.Value > 0 || days >= 0)
@@ -454,6 +456,11 @@ namespace FruitTreeTweaks
 				}
 
 				return codes.AsEnumerable();
+			}
+
+			public static void Postfix(ref bool __result)
+			{
+				if (!__result) { Log("TryAddFruit() failed to add fruit! \nPlease navigate to https://smapi.io/log/ to acquire your SMAPI log and post a bug report on Nexus with a link to the log.", LogLevel.Error); }
 			}
 		}
     }
