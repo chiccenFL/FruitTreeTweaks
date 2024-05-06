@@ -99,21 +99,21 @@ namespace FruitTreeTweaks
 				{
 					if (days > -Config.DaysUntilSilverFruit)
 					{
-						SMonitor.Log($"{days} is not old enough for Silver. Returning Base.");
+						Log($"{days} is not old enough for Silver. Returning Base.", debugOnly: true);
 						return 0;
 					}
 					else {
-						SMonitor.Log($"{days} is older than -{Config.DaysUntilSilverFruit}! Returning 2");
+						Log($"{days} is older than -{Config.DaysUntilSilverFruit}! Returning 2", debugOnly: true);
 						return 1; 
 					}
 				}
 				else {
-					SMonitor.Log($"{days} is older than -{Config.DaysUntilGoldFruit}! Returning 3");
+					Log($"{days} is older than -{Config.DaysUntilGoldFruit}! Returning 3", debugOnly: true);
 					return 2; 
 				}
 			}
 			else {
-				SMonitor.Log($"{days} is older than -{Config.DaysUntilIridiumFruit}! Returning 4");
+				Log($"{days} is older than -{Config.DaysUntilIridiumFruit}! Returning 4", debugOnly: true);
 				return 4;
 			}
 		}
