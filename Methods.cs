@@ -71,21 +71,6 @@ namespace FruitTreeTweaks
                 return Vector2.Zero;
             return GetFruitOffset(tree, index);
         }
-        private static int GetFruitQualityDays(int days)
-        {
-            if (!Config.EnableMod)
-                return days;
-            switch (days)
-            {
-                case -112:
-                    return -Config.DaysUntilSilverFruit;
-                case -224:
-                    return -Config.DaysUntilGoldFruit;
-                case -336:
-                    return -Config.DaysUntilIridiumFruit;
-            }
-            return days;
-        }
 
 		public static int QualityPatch(int days)
 		{
