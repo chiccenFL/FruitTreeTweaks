@@ -36,12 +36,15 @@ namespace FruitTreeTweaks
         {
             Config = Helper.ReadConfig<ModConfig>();
 
+            I18n.Init(helper.Translation);
+
             context = this;
 
             SMonitor = Monitor;
             SHelper = helper;
 
             helper.Events.GameLoop.GameLaunched += GameLoop_GameLaunched;
+
             var harmony = new Harmony(ModManifest.UniqueID);
             harmony.PatchAll();
 
@@ -103,69 +106,77 @@ namespace FruitTreeTweaks
 
             configMenu.AddBoolOption(
                 mod: ModManifest,
-                name: () => "Mod Enabled",
+                name: () => I18n.EnableMod(),
                 getValue: () => Config.EnableMod,
                 setValue: value => Config.EnableMod = value
             );
             Log($"Mod enabled: {Config.EnableMod}", debugOnly: true);
             configMenu.AddBoolOption(
                 mod: ModManifest,
-                name: () => "Crops Block",
-				tooltip: () => "Set true if you want crops to prevent growth",
+                name: () => I18n.CropsBlock(),
+				tooltip: () => I18n.CropsBlock_1(),
                 getValue: () => Config.CropsBlock,
                 setValue: value => Config.CropsBlock = value
             );
             Log($"Crops block: {Config.CropsBlock}", debugOnly: true);
             configMenu.AddBoolOption(
                 mod: ModManifest,
-                name: () => "Trees Block",
-				tooltip: () => "Set true if you want other trees to prevent growth",
+                name: () => I18n.TreesBlock(),
+				tooltip: () => I18n.TreesBlock_1(),
                 getValue: () => Config.TreesBlock,
                 setValue: value => Config.TreesBlock = value
             );
             Log($"Trees block: {Config.TreesBlock}", debugOnly: true);
             configMenu.AddBoolOption(
                 mod: ModManifest,
-                name: () => "Objects Block",
-				tooltip: () => "Set true if you want objects to prevent growth",
+                name: () => I18n.ObjectsBlock(),
+				tooltip: () => I18n.ObjectsBlock_1(),
                 getValue: () => Config.ObjectsBlock,
                 setValue: value => Config.ObjectsBlock = value
             );
             Log($"Objects block: {Config.ObjectsBlock}", debugOnly: true);
             configMenu.AddBoolOption(
                 mod: ModManifest,
-                name: () => "Plant Anywhere",
-                tooltip: () => "Remove map restrictions",
+                name: () => I18n.PlantAnywhere(),
+                tooltip: () => I18n.PlantAnywhere_1(),
                 getValue: () => Config.PlantAnywhere,
                 setValue: value => Config.PlantAnywhere = value
             );
             Log($"Plant Anywhere: {Config.PlantAnywhere}", debugOnly: true);
             configMenu.AddBoolOption(
                 mod: ModManifest,
-                name: () => "Fruit All Seasons",
-                tooltip: () => "Excludes Winter",
+                name: () => I18n.PlantOnPaths(),
+                tooltip: () => I18n.PlantOnPaths_1(),
+                getValue: () => Config.PlantOnPaths,
+                setValue: value => Config.PlantOnPaths = value
+            );
+            Log($"Plant On Paths: {Config.PlantOnPaths}", debugOnly: true);
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => I18n.FruitAllSeasons(),
+                tooltip: () => I18n.FruitAllSeasons_1(),
                 getValue: () => Config.FruitAllSeasons,
                 setValue: value => Config.FruitAllSeasons = value
             );
-            Log($"Fruit In Winter: {Config.FruitInWinter}", debugOnly: true);
+            Log($"Fruit All Seasons: {Config.FruitAllSeasons}", debugOnly: true);
             configMenu.AddBoolOption(
                 mod: ModManifest,
-                name: () => "Fruit In Winter",
-                tooltip: () => "Expands Fruit All Seasons to include Winter. Fruit All Seasons must be enabled.",
+                name: () => I18n.FruitInWinter(),
+                tooltip: () => I18n.FruitInWinter_1(),
                 getValue: () => Config.FruitInWinter,
                 setValue: value => Config.FruitInWinter = value
             );
-            Log($"Fruit All Seasons: {Config.FruitAllSeasons}", debugOnly: true);
+            Log($"Fruit In Winter: {Config.FruitInWinter}", debugOnly: true);
             configMenu.AddNumberOption(
                 mod: ModManifest,
-                name: () => "Max Fruit / Tree",
+                name: () => I18n.MaxFruitTree(),
                 getValue: () => Config.MaxFruitPerTree,
                 setValue: value => Config.MaxFruitPerTree = value
             );
             Log($"Max Fruit / Tree: {Config.MaxFruitPerTree}", debugOnly: true);
             configMenu.AddNumberOption(
                 mod: ModManifest,
-                name: () => "Days to Mature",
+                name: () => I18n.DaysUntilMature(),
                 getValue: () => Config.DaysUntilMature,
                 setValue: value => Config.DaysUntilMature = value
             );
@@ -216,40 +227,40 @@ namespace FruitTreeTweaks
             ); these last 4 are just out because FruitTree.draw_Patch isn't working right now anyway, so it's a bit silly being there when it does nothing atm. */
             configMenu.AddNumberOption(
                 mod: ModManifest,
-                name: () => "Days Until Silver",
-                tooltip: () => "After fully mature",
+                name: () => I18n.DaysUntilSilver(),
+                tooltip: () => I18n.DaysUntilTip(),
                 getValue: () => Config.DaysUntilSilverFruit,
                 setValue: value => Config.DaysUntilSilverFruit = value
             );
             Log($"Days until Silver: {Config.DaysUntilSilverFruit}", debugOnly: true);
             configMenu.AddNumberOption(
                 mod: ModManifest,
-                name: () => "Days Until Gold",
-                tooltip: () => "After fully mature",
+                name: () => I18n.DaysUntilGold(),
+                tooltip: () => I18n.DaysUntilTip(),
                 getValue: () => Config.DaysUntilGoldFruit,
                 setValue: value => Config.DaysUntilGoldFruit = value
             );
             Log($"Days until Gold: {Config.DaysUntilGoldFruit}", debugOnly: true);
             configMenu.AddNumberOption(
                 mod: ModManifest,
-                name: () => "Days Until Iridium",
-                tooltip: () => "After fully mature",
+                name: () => I18n.DaysUntilIridium(),
+                tooltip: () => I18n.DaysUntilTip(),
                 getValue: () => Config.DaysUntilIridiumFruit,
                 setValue: value => Config.DaysUntilIridiumFruit = value
             );
             Log($"Days until Iridium: {Config.DaysUntilIridiumFruit}", debugOnly: true);
             configMenu.AddBoolOption(
 				mod: ModManifest,
-				name: () => "Debug Logs",
-				tooltip: () => "Enable this if generating SMAPI log for a bug report or troubleshooting. Gives more verbose SMAPI logs.",
+				name: () => I18n.Debug(),
+				tooltip: () => I18n.Debug_1(),
 				getValue: () => Config.Debug,
 				setValue: value => Config.Debug = value
 			);
             Log($"Debug: Well you're reading this, aren't you?", debugOnly: true); // xaxaxa
             configMenu.AddBoolOption(
                 mod: ModManifest,
-                name: () => "God Mode",
-                tooltip: () => "WARNING: EXTREMELY DANGEROUS SETTING TO ENABLE. This setting will let you place fruit trees ANYWHERE, even ridiculous locations. It bypasses ALL collision checks. Enable at your own risk!",
+                name: () => I18n.GodMode(),
+                tooltip: () => I18n.GodMode_1(),
                 getValue: () => Config.GodMode,
                 setValue: value => Config.GodMode = value
             );
