@@ -252,7 +252,7 @@ namespace FruitTreeTweaks
 		}
 
 		
-        [HarmonyPatch(typeof(Object), nameof(Object.placementAction))]
+        [HarmonyPatch(typeof(Object), nameof(Object.placementAction))] // chiccen
         public class Object_placementAction_Patch
         {
             public static bool Prefix(GameLocation location, int x, int y, ref bool __result, Farmer who = null)
@@ -414,7 +414,7 @@ namespace FruitTreeTweaks
         {
             public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
-                SMonitor.Log($"Transpiling FruitTree.dayUpdate");
+                Log($"Transpiling FruitTree.dayUpdate", LogLevel.Debug);
                 var codes = new List<CodeInstruction>(instructions);
                 for (int i = 0; i < codes.Count; i++)
                 {
@@ -460,7 +460,7 @@ namespace FruitTreeTweaks
 
 			public static void Postfix(ref bool __result)
 			{
-				if (!__result) { Log("TryAddFruit() failed to add fruit! \nPlease navigate to https://smapi.io/log/ to acquire your SMAPI log and post a bug report on Nexus with a link to the log.", LogLevel.Error); }
+				if (!__result && Config.EnableMod) { Log("TryAddFruit() failed to add fruit! \nPlease navigate to https://smapi.io/log/ to acquire your SMAPI log and post a bug report on Nexus with a link to the log.", LogLevel.Error); }
 			}
 		}
     }
