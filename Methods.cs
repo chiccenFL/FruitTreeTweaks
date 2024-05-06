@@ -12,6 +12,7 @@ namespace FruitTreeTweaks
         private static Dictionary<GameLocation, Dictionary<Vector2, List<Vector2>>> fruitOffsets = new Dictionary<GameLocation, Dictionary<Vector2, List<Vector2>>>();
         private static Dictionary<GameLocation, Dictionary<Vector2, List<Color>>> fruitColors = new Dictionary<GameLocation, Dictionary<Vector2, List<Color>>>();
         private static Dictionary<GameLocation, Dictionary<Vector2, List<float>>> fruitSizes = new Dictionary<GameLocation, Dictionary<Vector2, List<float>>>();
+        private static int fruitToday;
 
         private static float GetTreeBottomOffset(FruitTree tree)
         {
@@ -19,35 +20,17 @@ namespace FruitTreeTweaks
                 return 1E-07f;
             return 1E-07f + Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key.X / 100000f;
         }
-        private static bool TreesBlock()
-        {
-            return Config.TreesBlock;
-        }
-        private static bool FruitTreesBlock()
-        {
-            return Config.TreesBlock;
-        }
         private static bool CanPlantAnywhere()
         {
             return Config.PlantAnywhere;
         }
         private static int GetMaxFruit()
         {
-			return !Config.EnableMod ? 3 : Config.MaxFruitPerTree;
+			return !Config.EnableMod ? 3 : Math.Max(1, Config.MaxFruitPerTree);
         }
         private static int GetFruitPerDay()
         {
             return !Config.EnableMod ? 1 : Game1.random.Next(Config.MinFruitPerDay, Math.Max(Config.MinFruitPerDay, Config.MaxFruitPerDay + 1));
-        }
-        private static void TryAddMoreFruit(FruitTree __instance)
-        {
-            int fruitDay = GetFruitPerDay();
-            for (int i = 1; i < fruitDay; i++)
-            {
-                if (!__instance.TryAddFruit()) {
-                    return;
-                }
-            }
         }
         private static Color GetFruitColor(FruitTree tree, int index)
         {

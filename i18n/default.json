@@ -16,12 +16,16 @@
   "FruitInWinter.1": "Expands Fruit All Seasons to include Winter. Fruit All Seasons must be enabled.",
   "MaxFruitTree": "Max Fruit / Tree",
   "DaysUntilMature": "Days to Mature",
+  "MinFruitDay": "Min Fruit Per Day",
+  "MinFruitDay.1": "For a specific number of fruit/day, set this value to match Max Fruit Per Day",
+  "MaxFruitDay": "Max Fruit Per Day",
+  "MaxFruitDay.1": "For a specific number of fruit/day, set this value to match Min Fruit Per Day",
   "DaysUntilSilver": "Days Until Silver",
   "DaysUntilGold": "Days Until Gold",
   "DaysUntilIridium": "Days Until Iridium",
   "DaysUntilTip": "After fully mature",
   "Debug": "Debug Logs",
   "Debug.1": "Enable this if generating SMAPI log for a bug report or troubleshooting. Gives more verbose SMAPI logs.",
-  "GodMode":  "God Mode",
+  "GodMode": "God Mode",
   "GodMode.1": "WARNING: EXTREMELY DANGEROUS SETTING TO ENABLE. This setting will let you place fruit trees ANYWHERE, even ridiculous locations. It bypasses ALL collision checks. Enable at your own risk!"
 }

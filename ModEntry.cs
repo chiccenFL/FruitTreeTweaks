@@ -28,6 +28,8 @@ namespace FruitTreeTweaks
         public static IModHelper SHelper;
         public static ModConfig Config;
         public static ModEntry context;
+
+        private static int attempts = 0;
 		
 
         /// <summary>The mod entry point, called after the mod is first loaded.</summary>
@@ -44,6 +46,7 @@ namespace FruitTreeTweaks
             SHelper = helper;
 
             helper.Events.GameLoop.GameLaunched += GameLoop_GameLaunched;
+            helper.Events.GameLoop.SaveLoaded += GameLoop_SaveLoaded;
 
             var harmony = new Harmony(ModManifest.UniqueID);
             harmony.PatchAll();
@@ -143,13 +146,14 @@ namespace FruitTreeTweaks
                 setValue: value => Config.PlantAnywhere = value
             );
             Log($"Plant Anywhere: {Config.PlantAnywhere}", debugOnly: true);
+            /* future feature
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => I18n.PlantOnPaths(),
                 tooltip: () => I18n.PlantOnPaths_1(),
                 getValue: () => Config.PlantOnPaths,
                 setValue: value => Config.PlantOnPaths = value
-            );
+            );*/
             Log($"Plant On Paths: {Config.PlantOnPaths}", debugOnly: true);
             configMenu.AddBoolOption(
                 mod: ModManifest,
@@ -181,19 +185,22 @@ namespace FruitTreeTweaks
                 setValue: value => Config.DaysUntilMature = value
             );
             Log($"Days to Mature: {Config.DaysUntilMature}", debugOnly: true);
-            /* edge-case bug where if a user changes these numbers, it causes the age to increase by odd factors. I had set min/max both to 4 and the planted a tree, and that tree was instantly 3 days old somehow.
             configMenu.AddNumberOption(
                 mod: ModManifest,
-                name: () => "Min Fruit / Day",
+                name: () => I18n.MinFruitDay(),
+                tooltip: () => I18n.MinFruitDay_1(),
                 getValue: () => Config.MinFruitPerDay,
                 setValue: value => Config.MinFruitPerDay = value
             );
+            Log($"Min Fruit / Day: {Config.MinFruitPerDay}", debugOnly: true);
             configMenu.AddNumberOption(
                 mod: ModManifest,
-                name: () => "Max Fruit / Day",
+                name: () => I18n.MaxFruitDay(),
+                tooltip: () => I18n.MaxFruitDay_1(),
                 getValue: () => Config.MaxFruitPerDay,
                 setValue: value => Config.MaxFruitPerDay = value
             );
+            Log($"Max Fruit / Day: {Config.MaxFruitPerDay}", debugOnly: true);/*
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => "Color Variation",
@@ -257,6 +264,7 @@ namespace FruitTreeTweaks
 				setValue: value => Config.Debug = value
 			);
             Log($"Debug: Well you're reading this, aren't you?", debugOnly: true); // xaxaxa
+            /* future feature
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => I18n.GodMode(),
@@ -265,6 +273,12 @@ namespace FruitTreeTweaks
                 setValue: value => Config.GodMode = value
             );
             Log($"God Mode: {Config.GodMode}", debugOnly: true);
+            */
+        }
+
+        private void GameLoop_SaveLoaded(object sender, SaveLoadedEventArgs e)
+        {
+            fruitToday = GetFruitPerDay(); // this breaks if it is anywhere else so dont move it
         }
     }
 }

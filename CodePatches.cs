@@ -6,6 +6,8 @@ using Netcode;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData.Buildings;
+using StardewValley.GameData.FruitTrees;
+using StardewValley.GameData.WildTrees;
 using StardewValley.Internal;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.TerrainFeatures;
@@ -257,6 +259,7 @@ namespace FruitTreeTweaks
         {
             public static bool Prefix(GameLocation location, int x, int y, ref bool __result, Farmer who = null)
             {
+				if (location is not Farm && !Config.PlantAnywhere) return true;
 
 				if (who?.CurrentItem?.GetItemTypeId() is not "(O)") return true;
 
@@ -268,15 +271,21 @@ namespace FruitTreeTweaks
 
 					LogOnce($"Too Close To Another Tree: {FruitTree.IsTooCloseToAnotherTree(new Vector2(x / 64, y / 64), location)}", debugOnly: true);
 					LogOnce($"Is Growth Blocked: {FruitTree.IsGrowthBlocked(new Vector2(x / 64, y / 64), location)}", debugOnly: true);
-					
+					LogOnce($"Can Item Be Placed Here: {location.CanItemBePlacedHere(placementTile)}", debugOnly: true);
+
+
 					if (location.terrainFeatures.TryGetValue(placementTile, out var terrainFeature2))
 					{
 						if (!(terrainFeature2 is HoeDirt { crop: null })) { return true; }
 					}
 					location.terrainFeatures.Remove(placementTile);
 					string tileType = location.doesTileHaveProperty((int)placementTile.X, (int)placementTile.Y, "Type", "back");
-					if ((location is Farm && location.CanItemBePlacedHere(placementTile)) || CanPlantAnywhere())
+					Object tileObject = location.IsTileOccupiedBy(placementTile) ? location.getObjectAtTile((int)placementTile.X, (int)placementTile.Y) : null;
+					bool tileIsFree = tileObject is null ? true : (tileObject.IsFloorPathItem() && Config.PlantOnPaths);
+					Log($"tileIsFree: {tileIsFree}", LogLevel.Alert);
+					if ((location is Farm || CanPlantAnywhere()) && (tileIsFree || Config.GodMode))
 					{
+
 						location.playSound("dirtyHit");
 						DelayedAction.playSoundAfterDelay("coin", 100);
 						FruitTree fruitTree = new FruitTree(obj.ItemId)
@@ -301,19 +310,21 @@ namespace FruitTreeTweaks
 
 			public static bool Prefix(GameLocation l, Vector2 tile, ref bool __result)
 			{
-				CollisionMask mask = CollisionMask.All;
+				//CollisionMask mask = CollisionMask.All;
 				Farmer who = Game1.player;
 				Object tree = who?.ActiveObject ?? null;
 
-				if (tree is null || !Config.EnableMod) return true;
+				if (tree is null || !Config.EnableMod || (l is not Farm && !Config.PlantAnywhere)) return true;
 
 				if (tree.IsFruitTreeSapling())
 				{
 					LogOnce($"{tree.DisplayName} too close: {FruitTree.IsTooCloseToAnotherTree(tile, l, false)}", debugOnly: true);
 					LogOnce($"{tree.DisplayName} growth blocked: {FruitTree.IsGrowthBlocked(tile, l)}", debugOnly: true);
-					LogOnce($"{tree.DisplayName} CantPlantTreesHere: {l.CanPlantTreesHere(tree.ItemId, (int)tile.X, (int)tile.Y, out var deniedMessage2)}", debugOnly: true);
+					LogOnce($"{tree.DisplayName} CanPlantTreesHere: {l.CanPlantTreesHere(tree.ItemId, (int)tile.X, (int)tile.Y, out var deniedMessage2)}", debugOnly: true);
 
-					if (!l.CanItemBePlacedHere(tile, itemIsPassable: true, mask))
+                    Object tileObject = l.IsTileOccupiedBy(tile) ? l.getObjectAtTile((int)tile.X, (int)tile.Y) : null;
+                    bool tileIsFree = tileObject is null ? true : (tileObject.IsFloorPathItem() && Config.PlantOnPaths);
+                    if ((l is not Farm && !CanPlantAnywhere()) || (!tileIsFree && !Config.GodMode))
 					{
 						return true;
 					}
@@ -327,11 +338,11 @@ namespace FruitTreeTweaks
 
 			public static bool Prefix(GameLocation l, Vector2 tile, bool showError, ref bool __result)
 			{
-				CollisionMask mask = CollisionMask.All;
+				//CollisionMask mask = CollisionMask.All;
 				Farmer who = Game1.player;
 				Object tree = who?.ActiveObject ?? null;
 
-                if (tree is null || !Config.EnableMod) return true;
+                if (tree is null || !Config.EnableMod || (l is not Farm && !Config.PlantAnywhere)) return true;
 
                 if (tree.IsFruitTreeSapling())
 				{
@@ -339,12 +350,14 @@ namespace FruitTreeTweaks
 					LogOnce($"{tree.DisplayName} growth blocked: {FruitTree.IsGrowthBlocked(tile, l)}", debugOnly:true);
 					LogOnce($"{tree.DisplayName} CantPlantTreesHere: {l.CanPlantTreesHere(tree.ItemId, (int)tile.X, (int)tile.Y, out var deniedMessage2)}", debugOnly: true);
 
-					if (!l.CanItemBePlacedHere(tile, itemIsPassable: true, mask))
-					{
-						return true;
-					}
+                    Object tileObject = l.IsTileOccupiedBy(tile) ? l.getObjectAtTile((int)tile.X, (int)tile.Y) : null;
+                    bool tileIsFree = tileObject is null ? true : (tileObject.IsFloorPathItem() && Config.PlantOnPaths);
+                    if ((l is not Farm && !CanPlantAnywhere()) || (!tileIsFree && !Config.GodMode))
+                    {
+                        return true;
+                    }
 
-					__result = true;
+                    __result = true;
 					return false;
 				}
 				LogOnce($"canBePlacedHere handling for {tree?.DisplayName} passed to original method.", debugOnly: true);
@@ -356,10 +369,7 @@ namespace FruitTreeTweaks
 				Farmer who = Game1.player;
 				Object tree = who?.ActiveObject ?? null;
 
-                if (tree is null || !Config.EnableMod) return true;
-
-                Object obj = l.getObjectAtTile((int)tile.X, (int)tile.Y);
-				LogOnce($"Object at {(int)tile.X}, {(int)tile.Y} is {obj?.DisplayName}", debugOnly: true);
+                if (tree is null || !Config.EnableMod || (l is not Farm && !Config.PlantAnywhere)) return true;
 
 				if (tree.IsFruitTreeSapling())
 				{
@@ -367,12 +377,14 @@ namespace FruitTreeTweaks
 					LogOnce($"{tree.DisplayName} growth blocked: {FruitTree.IsGrowthBlocked(tile, l)}", debugOnly: true);
 					LogOnce($"{tree.DisplayName} CantPlantTreesHere: {l.CanPlantTreesHere(tree.ItemId, (int)tile.X, (int)tile.Y, out var deniedMessage2)}", debugOnly: true);
 
-					if (!l.CanItemBePlacedHere(tile, itemIsPassable: true, collisionMask))
-					{
-						return true;
-					}
+                    Object tileObject = l.IsTileOccupiedBy(tile) ? l.getObjectAtTile((int)tile.X, (int)tile.Y) : null;
+                    bool tileIsFree = tileObject is null ? true : (tileObject.IsFloorPathItem() && Config.PlantOnPaths);
+                    if ((l is not Farm && !CanPlantAnywhere()) || (!tileIsFree && !Config.GodMode))
+                    {
+                        return true;
+                    }
 
-					__result = true;
+                    __result = true;
 					return false;
 				}
 				LogOnce($"canBePlacedHere handling for {tree?.DisplayName} passed to original method.", debugOnly: true);
@@ -384,10 +396,7 @@ namespace FruitTreeTweaks
 				Farmer who = Game1.player;
 				Object tree = who?.ActiveObject ?? null;
 
-                if (tree is null || !Config.EnableMod) return true;
-
-                Object obj = l.getObjectAtTile((int)tile.X, (int)tile.Y);
-				LogOnce($"Object at {(int)tile.X}, {(int)tile.Y} is {obj?.DisplayName}", debugOnly: true);
+                if (tree is null || !Config.EnableMod || (l is not Farm && !Config.PlantAnywhere)) return true;
 
 				if (tree.IsFruitTreeSapling())
 				{
@@ -395,12 +404,14 @@ namespace FruitTreeTweaks
 					LogOnce($"{tree.DisplayName} growth blocked: {FruitTree.IsGrowthBlocked(tile, l)}", debugOnly: true);
 					LogOnce($"{tree.DisplayName} CantPlantTreesHere: {l.CanPlantTreesHere(tree.ItemId, (int)tile.X, (int)tile.Y, out var deniedMessage2)}", debugOnly: true);
 
-					if (!l.CanItemBePlacedHere(tile, itemIsPassable: true, collisionMask))
-					{
-						return true;
-					}
+                    Object tileObject = l.IsTileOccupiedBy(tile) ? l.getObjectAtTile((int)tile.X, (int)tile.Y) : null;
+                    bool tileIsFree = tileObject is null ? true : (tileObject.IsFloorPathItem() && Config.PlantOnPaths);
+                    if ((l is not Farm && !CanPlantAnywhere()) || (!tileIsFree && !Config.GodMode))
+                    {
+                        return true;
+                    }
 
-					__result = true;
+                    __result = true;
 					return false;
 				}
 				LogOnce($"canBePlacedHere handling for {tree?.DisplayName} passed to original method.", debugOnly: true);
@@ -414,13 +425,13 @@ namespace FruitTreeTweaks
         {
             public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
-                Log($"Transpiling FruitTree.dayUpdate", LogLevel.Debug);
+                Log($"Transpiling FruitTree.dayUpdate");
                 var codes = new List<CodeInstruction>(instructions);
                 for (int i = 0; i < codes.Count; i++)
                 {
                     if (codes[i].opcode == OpCodes.Call && (MethodInfo)codes[i].operand == AccessTools.Method(typeof(FruitTree), nameof(FruitTree.TryAddFruit)))
                     {
-                        Log("Replacing fruit per day with methods");
+                        Log("Replacing fruit per day with method");
                         //codes.RemoveAt(i); BROKEN -- CRASHES GAME. COME BACK TO THIS LATER THIS SHIT SUCKS.
 						//codes.Insert(i, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.TryAddMoreFruit))));
                     }
@@ -433,23 +444,31 @@ namespace FruitTreeTweaks
 
                 return codes.AsEnumerable();
             }
+
+			public static bool Prefix() // post-fix is too late, tree had already generated fruit
+			{
+				fruitToday = GetFruitPerDay(); // randomize fruit per day every day
+				attempts = 0; // reset each night
+				return true;
+			}
         }
 
 		[HarmonyPatch(typeof(FruitTree), nameof(FruitTree.TryAddFruit))] // chiccen
 		public class FruitTree_TryAddFruit_Patch
 		{
+			
 			public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
 			{
 				if (!Config.EnableMod) return instructions;
 
-				Log("Transpiling FruitTree.TryAddFruit", LogLevel.Debug);
+				Log("Transpiling FruitTree.TryAddFruit");
 				
 				var codes= new List<CodeInstruction>(instructions);
 				for (int i = 0; i < codes.Count; i++)
 				{
 					if (codes[i].opcode == OpCodes.Ldc_I4_3)
 					{
-						Log("replacing TryAddFruit with method", LogLevel.Trace);
+						Log("replacing max fruit per tree with method");
 						codes.Insert(i, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.GetMaxFruit))));
 						codes.RemoveAt(i + 1);
 					}
@@ -458,9 +477,16 @@ namespace FruitTreeTweaks
 				return codes.AsEnumerable();
 			}
 
-			public static void Postfix(ref bool __result)
+			public static void Postfix(FruitTree __instance, ref bool __result) // 1 by default because base function already added one, or tried
 			{
-				if (!__result && Config.EnableMod) { Log("TryAddFruit() failed to add fruit! \nPlease navigate to https://smapi.io/log/ to acquire your SMAPI log and post a bug report on Nexus with a link to the log.", LogLevel.Error); }
+				attempts++;
+				if (!Config.EnableMod || !__result || fruitToday == 1) return;
+
+				if (!__instance.stump.Value && __instance.growthStage.Value >= 4 && __instance.IsInSeasonHere() && __instance.fruit.Count < GetMaxFruit() && attempts + 1 <= fruitToday)
+				{
+					__instance.TryAddFruit();
+				}
+				return;
 			}
 		}
     }
