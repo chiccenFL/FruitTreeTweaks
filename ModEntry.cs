@@ -10,11 +10,7 @@ using StardewValley.ItemTypeDefinitions;
 
 /***
  * TO DO:
- * Fix min/max Fruit Per Day, and Fruit Per Day in general
- * Fix bug that causes Fruit Per Day values to multiply how fast a tree ages (e.g. min/max = 4 made tree age -3 the day after it was planted)
  * Fix draw so you can see more than 3 fruit
- * Fix chopped down fruit tree producing sapling of equal quality to the fruit that tree had produced.
- * Change how debug Logging works so toggling Debug in Config makes all Trace logs Debug logs instead.
  * For fun: see if you can change it so trees can be placed on top of paths
 ***/
 
@@ -66,10 +62,10 @@ namespace FruitTreeTweaks
 
         public static void Log(string message, LogLevel level = LogLevel.Trace, bool debugOnly = false)
 		{
-			level = Config.Debug ? LogLevel.Debug : level; // if in Debug mode, upgrade LogLevel to Debug. Otherwise, let it stay as it was.
-            if (!debugOnly) SMonitor.Log(message, level); // so long as this isn't already a debug log, push log with/without Debug upgrade
-            else if (debugOnly && Config.Debug) SMonitor.Log(message, level); // was gonna make this just else, but I prob did this inefficiently
-            else return; // if it is debugOnly and Config.Debug != true, don't send it. clean up those SMAPI logs
+			level = Config.Debug ? LogLevel.Debug : level;
+            if (!debugOnly) SMonitor.Log(message, level); 
+            else if (debugOnly && Config.Debug) SMonitor.Log(message, level); /
+            else return;
 		}
 
         /// <summary>
@@ -82,7 +78,7 @@ namespace FruitTreeTweaks
         /// </remarks>
 		/// <param name="message"></param>
 		/// <param name="level"></param>
-		public static void LogOnce(string message, LogLevel level = LogLevel.Trace, bool debugOnly = false) // all Log() comments apply here as functions are nearly identical
+		public static void LogOnce(string message, LogLevel level = LogLevel.Trace, bool debugOnly = false)
 		{
             level = Config.Debug ? LogLevel.Debug : level;
             if (!debugOnly) SMonitor.LogOnce(message, level);
