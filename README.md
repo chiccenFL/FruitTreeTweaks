@@ -1,4 +1,4 @@
-## chiccen's Updated Fruit Tree Tweeks For 1.6 
+## Fruit Tree Tweeks For 1.6 by aedenthorn via chiccen
 
 ##### [Original mod](https://www.nexusmods.com/stardewvalley/mods/11422) created by [aedenthorn](https://next.nexusmods.com/profile/aedenthorn/about-me)
 
@@ -36,3 +36,9 @@ Portuguese | [❑](./i18n)
 Russian    | [❑](./i18n)
 Spanish    | [❑](./i18n)
 Turkish    | [❑](./i18n)
+
+## Credits and Notes
+
+Huge thank you to anyone who contributes to the Github, Posts, Bug Reports, and specifically to Nexus user [Dervalanana](https://next.nexusmods.com/profile/Dervalanana/mods) who held down the fort while I got around to fixing many of the issues that plagued Fruit Tree Tweaks and even provided some advice while I was working on it. If you would also like to contribute, you are always welcome to reach out on any platform you can reach me, although Discord is the best (@chiccen).
+
+This mod will be removed if requested by the original author, aedenthorn.
