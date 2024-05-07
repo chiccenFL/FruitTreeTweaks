@@ -1,6 +1,6 @@
 ## Fruit Tree Tweeks For 1.6 by aedenthorn via chiccen
 
-##### [Original mod](https://www.nexusmods.com/stardewvalley/mods/11422) created by [aedenthorn](https://next.nexusmods.com/profile/aedenthorn/about-me)
+### [Original mod](https://www.nexusmods.com/stardewvalley/mods/11422) created by [aedenthorn](https://next.nexusmods.com/profile/aedenthorn/about-me)
 
 This update doesn't change much from the original, it primarily brings the mod up to date with Stardew Valley version 1.6.  
 Some features that broke with 1.6 are still missing and being worked on. This update is a work in progress, and those features will return eventually.  
