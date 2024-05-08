@@ -429,12 +429,6 @@ namespace FruitTreeTweaks
                 var codes = new List<CodeInstruction>(instructions);
                 for (int i = 0; i < codes.Count; i++)
                 {
-                    if (codes[i].opcode == OpCodes.Call && (MethodInfo)codes[i].operand == AccessTools.Method(typeof(FruitTree), nameof(FruitTree.TryAddFruit)))
-                    {
-                        Log("Replacing fruit per day with method");
-                        //codes.RemoveAt(i); BROKEN -- CRASHES GAME. COME BACK TO THIS LATER THIS SHIT SUCKS.
-						//codes.Insert(i, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.TryAddMoreFruit))));
-                    }
                     if (i < codes.Count - 3 && codes[i].opcode == OpCodes.Ldfld && (FieldInfo)codes[i].operand == AccessTools.Field(typeof(FruitTree), nameof(FruitTree.daysUntilMature)) && codes[i + 3].opcode == OpCodes.Bgt_S)
                     {
                         Log("replacing daysUntilMature value with method", LogLevel.Trace);
@@ -445,10 +439,10 @@ namespace FruitTreeTweaks
                 return codes.AsEnumerable();
             }
 
-			public static bool Prefix() // post-fix is too late, tree had already generated fruit
+			public static bool Prefix()
 			{
-				fruitToday = GetFruitPerDay(); // randomize fruit per day every day
-				attempts = 0; // reset each night
+				fruitToday = GetFruitPerDay();
+				attempts = 0;
 				return true;
 			}
         }

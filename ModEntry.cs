@@ -64,7 +64,7 @@ namespace FruitTreeTweaks
 		{
 			level = Config.Debug ? LogLevel.Debug : level;
             if (!debugOnly) SMonitor.Log(message, level); 
-            else if (debugOnly && Config.Debug) SMonitor.Log(message, level); /
+            else if (debugOnly && Config.Debug) SMonitor.Log(message, level);
             else return;
 		}
 
