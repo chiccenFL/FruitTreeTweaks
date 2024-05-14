@@ -122,6 +122,7 @@ namespace FruitTreeTweaks
                         codes.Insert(i + 2, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.GetTreeBottomOffset))));
                         found1 = true;
                     }
+					/*
                     else if (i > 0 && i < codes.Count - 18 && codes[i].opcode == OpCodes.Ldsfld && (FieldInfo)codes[i].operand == AccessTools.Field(typeof(Game1), nameof(ItemRegistry.GetMetadata) + "." + nameof(ItemMetadata.GetParsedData) + "." + nameof(ParsedItemData.GetTexture)) && codes[i + 15].opcode == OpCodes.Call && (MethodInfo)codes[i + 15].operand == AccessTools.PropertyGetter(typeof(Color), nameof(Color.White)))
                     {
                         SMonitor.Log("modifying fruit scale");
@@ -135,7 +136,20 @@ namespace FruitTreeTweaks
                         codes.Insert(i + 16, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.GetFruitColor))));
                         codes.Insert(i + 16, new CodeInstruction(OpCodes.Ldc_I4, which));
                         which++;
-                    }
+                    }*/
+					else if (i < codes.Count && codes[i+1].opcode == OpCodes.Ldc_R4 && (float)codes[i+1].operand == 0.0f && codes[i+3].opcode == OpCodes.Ldc_R4 && (int)codes[i+3].operand == 4 && codes[i+4].opcode == OpCodes.Ldc_I4_0)
+					{
+						codes.RemoveAt(i);
+						codes.Insert(i, new CodeInstruction(OpCodes.Ldloc_S, 8));
+						codes.Insert(i, new CodeInstruction(OpCodes.Ldarg_0, null));
+						codes.Insert(i, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.GetFruitColor))));
+						codes.Insert(i, new CodeInstruction(OpCodes.Ldc_I4, which));
+						codes.RemoveAt(i + 3);
+                        codes.Insert(i, new CodeInstruction(OpCodes.Ldloc_S, 8));
+                        codes.Insert(i, new CodeInstruction(OpCodes.Ldarg_0, null));
+                        codes.Insert(i + 3, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.GetFruitScale))));
+						codes.Insert(i + 3, new CodeInstruction(OpCodes.Ldc_I4, which));
+					}
                     if (found1 && which >= 2)
                         break;
                 }
@@ -282,7 +296,7 @@ namespace FruitTreeTweaks
 					string tileType = location.doesTileHaveProperty((int)placementTile.X, (int)placementTile.Y, "Type", "back");
 					Object tileObject = location.IsTileOccupiedBy(placementTile) ? location.getObjectAtTile((int)placementTile.X, (int)placementTile.Y) : null;
 					bool tileIsFree = tileObject is null ? true : (tileObject.IsFloorPathItem() && Config.PlantOnPaths);
-					Log($"tileIsFree: {tileIsFree}", LogLevel.Alert);
+					Log($"tileIsFree: {tileIsFree}", LogLevel.Debug);
 					if ((location is Farm || CanPlantAnywhere()) && (tileIsFree || Config.GodMode))
 					{
 
