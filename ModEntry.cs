@@ -208,7 +208,7 @@ namespace FruitTreeTweaks
             );
             Log($"Max Fruit / Day: {Config.MaxFruitPerDay}", debugOnly: true);
             
-            configMenu.AddNumberOption( // just setting this comment here in case i need to comment this all out again and need to find where the first draw() option was lol
+            configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => "Color Variation",
                 tooltip: () => "0 - 255, applied randomly to R, B, and G for each fruit, only applied cosmetically while on tree",
@@ -238,7 +238,7 @@ namespace FruitTreeTweaks
                 tooltip: () => "Top and bottom border on the canopy to limit fruit spawn locations",
                 getValue: () => Config.FruitSpawnBufferY,
                 setValue: value => Config.FruitSpawnBufferY = value
-            ); //these last 4 are just out because FruitTree.draw_Patch isn't working right now anyway, so it's a bit silly being there when it does nothing atm. */
+            );
 
             configMenu.AddNumberOption(
                 mod: ModManifest,
