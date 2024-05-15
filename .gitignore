@@ -3,4 +3,4 @@ Properties
 .vs
 bin
 obj
-.txt
+*.txt
