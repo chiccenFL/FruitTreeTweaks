@@ -146,7 +146,7 @@ namespace FruitTreeTweaks
                 setValue: value => Config.PlantAnywhere = value
             );
             Log($"Plant Anywhere: {Config.PlantAnywhere}", debugOnly: true);
-
+            /* future feature
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => I18n.PlantOnPaths(),
@@ -154,7 +154,7 @@ namespace FruitTreeTweaks
                 getValue: () => Config.PlantOnPaths,
                 setValue: value => Config.PlantOnPaths = value
             );
-            Log($"Plant On Paths: {Config.PlantOnPaths}", debugOnly: true);
+            Log($"Plant On Paths: {Config.PlantOnPaths}", debugOnly: true);*/
 
             configMenu.AddBoolOption(
                 mod: ModManifest,
