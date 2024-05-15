@@ -207,38 +207,6 @@ namespace FruitTreeTweaks
                 setValue: value => Config.MaxFruitPerDay = value
             );
             Log($"Max Fruit / Day: {Config.MaxFruitPerDay}", debugOnly: true);
-            
-            configMenu.AddNumberOption(
-                mod: ModManifest,
-                name: () => "Color Variation",
-                tooltip: () => "0 - 255, applied randomly to R, B, and G for each fruit, only applied cosmetically while on tree",
-                getValue: () => Config.ColorVariation,
-                setValue: value => Config.ColorVariation = value
-            );
-            Log($"Color Variation: {Config.EnableMod}", debugOnly: true);
-            configMenu.AddNumberOption(
-                mod: ModManifest,
-                name: () => "Size Variation %",
-                tooltip: () => "0 - 99, applied randomly for each fruit, only applied cosmetically while on tree",
-                getValue: () => Config.SizeVariation,
-                setValue: value => Config.SizeVariation = value,
-                min:0,
-                max:99
-            );
-            configMenu.AddNumberOption(
-                mod: ModManifest,
-                name: () => "Fruit Buffer X",
-                tooltip: () => "Left and right border on the canopy to limit fruit spawn locations",
-                getValue: () => Config.FruitSpawnBufferX,
-                setValue: value => Config.FruitSpawnBufferX = value
-            );
-            configMenu.AddNumberOption(
-                mod: ModManifest,
-                name: () => "Fruit Buffer Y",
-                tooltip: () => "Top and bottom border on the canopy to limit fruit spawn locations",
-                getValue: () => Config.FruitSpawnBufferY,
-                setValue: value => Config.FruitSpawnBufferY = value
-            );
 
             configMenu.AddNumberOption(
                 mod: ModManifest,
@@ -285,6 +253,49 @@ namespace FruitTreeTweaks
             );
             Log($"God Mode: {Config.GodMode}", debugOnly: true);
             */
+
+            configMenu.SetTitleScreenOnlyForNextOptions(
+                mod: ModManifest,
+                titleScreenOnly: true
+                );
+
+            configMenu.AddSectionTitle(
+                mod: ModManifest,
+                text: () => I18n.Section_Title(),
+                tooltip: () => I18n.Section_Tooltip()
+                );
+
+            configMenu.AddNumberOption(
+                mod: ModManifest,
+                name: () => I18n.ColorVar(),
+                tooltip: () => I18n.ColorVar_1(),
+                getValue: () => Config.ColorVariation,
+                setValue: value => Config.ColorVariation = value
+            );
+            Log($"Color Variation: {Config.EnableMod}", debugOnly: true);
+            configMenu.AddNumberOption(
+                mod: ModManifest,
+                name: () => I18n.SizeVar(),
+                tooltip: () => I18n.SizeVar_1(),
+                getValue: () => Config.SizeVariation,
+                setValue: value => Config.SizeVariation = value,
+                min: 0,
+                max: 99
+            );
+            configMenu.AddNumberOption(
+                mod: ModManifest,
+                name: () => I18n.BufferX(),
+                tooltip: () => I18n.BufferX_1(),
+                getValue: () => Config.FruitSpawnBufferX,
+                setValue: value => Config.FruitSpawnBufferX = value
+            );
+            configMenu.AddNumberOption(
+                mod: ModManifest,
+                name: () => I18n.BufferY(),
+                tooltip: () => I18n.BufferY_1(),
+                getValue: () => Config.FruitSpawnBufferY,
+                setValue: value => Config.FruitSpawnBufferY = value
+            );
         }
 
         private void GameLoop_SaveLoaded(object sender, SaveLoadedEventArgs e)

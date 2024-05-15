@@ -27,5 +27,15 @@
   "Debug": "Debug Logs",
   "Debug.1": "Enable this if generating SMAPI log for a bug report or troubleshooting. Gives more verbose SMAPI logs.",
   "GodMode": "God Mode",
-  "GodMode.1": "WARNING: EXTREMELY DANGEROUS SETTING TO ENABLE. This setting will let you place fruit trees ANYWHERE, even ridiculous locations. It bypasses ALL collision checks. Enable at your own risk!"
+  "GodMode.1": "WARNING: EXTREMELY DANGEROUS SETTING TO ENABLE. This setting will let you place fruit trees ANYWHERE, even ridiculous locations. It bypasses ALL collision checks. Enable at your own risk!",
+  "Section.title": "Draw Options",
+  "Section.tooltip": "These can only be edited from the title screen, as changes won't take effect mid-game",
+  "ColorVar": "Color Variation",
+  "ColorVar.1": "0 - 255, applied randomly to R, B, and G for each fruit, only applied cosmetically while on tree",
+  "SizeVar": "Size Variation",
+  "SizeVar.1": "0 - 99, applied randomly for each fruit, only applied cosmetically while on tree",
+  "BufferX": "Fruit Buffer X",
+  "BufferX.1": "Left and right border on the canopy to limit fruit spawn locations",
+  "BufferY": "Fruit Buffer Y",
+  "BufferY.1": "Top and bottom border on the canopy to limit fruit spawn locations"
 }

@@ -27,5 +27,15 @@
   "Debug": "Debuggen",
   "Debug.1": "Aktivieren Sie dies, bevor Sie einen SMAPI-Bericht erstellen. Zur Fehlerbehebung.",
   "GodMode": "Gott-Modus",
-  "GodMode.1": "ACHTUNG: DIE EINSTELLUNG ZU AKTIVIEREN IST EXTREM GEFÄHRLICH. Mit dieser Einstellung können Sie Obstbäume ÜBERALL platzieren, sogar an absurden Orten. Es umgeht ALLE Kollisionsprüfungen. Aktivierung auf eigene Gefahr!"
+  "GodMode.1": "ACHTUNG: DIE EINSTELLUNG ZU AKTIVIEREN IST EXTREM GEFÄHRLICH. Mit dieser Einstellung können Sie Obstbäume ÜBERALL platzieren, sogar an absurden Orten. Es umgeht ALLE Kollisionsprüfungen. Aktivierung auf eigene Gefahr!",
+  "Section.title": "Renderoptionen",
+  "Section.tooltip": "Diese können nur über den Titelbildschirm bearbeitet werden, da Änderungen nicht mitten im Spiel wirksam werden",
+  "ColorVar": "Farbvariation",
+  "ColorVar.1": "0 - 255, zufällig auf R, B und G für jede Frucht aufgetragen, kosmetisch auf die Frucht aufgetragen, während sie am Baum ist",
+  "SizeVar": "Größenvariation",
+  "SizeVar.1": "0 - 99, wird nach dem Zufallsprinzip auf jede Frucht aufgetragen und nur kosmetisch auf die Frucht aufgetragen, während sie am Baum ist",
+  "BufferX": "Puffer X",
+  "BufferX.1": "Linke und rechte Kante des Blätterdaches zur Begrenzung der Laichstellen für Früchte",
+  "BufferY": "Puffer Y",
+  "BufferY.1": "Obere und untere Grenzen des Blätterdachs zur Begrenzung der Laichplätze für Früchte"
 }
