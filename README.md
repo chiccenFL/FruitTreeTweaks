@@ -21,13 +21,13 @@ Contributions are welcome! See [Modding:Translations](https://stardewvalleywiki.
 on the wiki for help contributing translations.  
 Message @chiccen on Discord for details on how you would like to be credited, or see the [official translation request on Github.](https://github.com/StardewModders/mod-translations/issues/66) 
 
-(❑ = untranslated, ↻ = partly translated, ✓ = fully translated)
+(❑ = untranslated, ↻ = Google Translate/needs revision, ✓ = fully translated)
 
 &nbsp;     | Fruit Tree Tweaks
 :--------- | :----------------
 Chinese    | [❑](./i18n)
 French     | [❑](./i18n)
-German     | [❑](./i18n)
+German     | [↻](./i18n)
 Hungarian  | [❑](./i18n)
 Italian    | [❑](./i18n)
 Japanese   | [❑](./i18n)
