@@ -104,13 +104,13 @@ namespace FruitTreeTweaks
 
 
 
-        [HarmonyPatch(typeof(FruitTree), nameof(FruitTree.draw), new Type[] { typeof(SpriteBatch) })] // aedenthorn
+        [HarmonyPatch(typeof(FruitTree), nameof(FruitTree.draw), new Type[] { typeof(SpriteBatch) })] // aedenthorn & chiccen
         public class FruitTree_draw_Patch
         {
             public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
 				if (!Config.EnableMod) return instructions;
-				SMonitor.Log($"Transpiling FruitTree.draw");
+				Log($"Transpiling FruitTree.draw", LogLevel.Debug);
                 var codes = new List<CodeInstruction>(instructions);
                 bool found1 = false;
                 int which = 0;
@@ -118,40 +118,29 @@ namespace FruitTreeTweaks
                 {
                     if (!found1 && i < codes.Count - 2 && codes[i].opcode == OpCodes.Ldc_I4_1 && codes[i + 1].opcode == OpCodes.Ldc_R4 && (float)codes[i + 1].operand == 1E-07f)
                     {
-                        SMonitor.Log("shifting bottom of tree draw layer offset");
+                        Log("shifting bottom of tree draw layer offset");
                         codes[i + 1].opcode = OpCodes.Ldarg_0;
                         codes.Insert(i + 2, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.GetTreeBottomOffset))));
                         found1 = true;
                     }
-					/*
-                    else if (i > 0 && i < codes.Count - 18 && codes[i].opcode == OpCodes.Ldsfld && (FieldInfo)codes[i].operand == AccessTools.Field(typeof(Game1), nameof(ItemRegistry.GetMetadata) + "." + nameof(ItemMetadata.GetParsedData) + "." + nameof(ParsedItemData.GetTexture)) && codes[i + 15].opcode == OpCodes.Call && (MethodInfo)codes[i + 15].operand == AccessTools.PropertyGetter(typeof(Color), nameof(Color.White)))
-                    {
-                        SMonitor.Log("modifying fruit scale");
-                        codes[i + 18].opcode = OpCodes.Ldarg_0;
-                        codes[i + 18].operand = null;
-                        codes.Insert(i + 19, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.GetFruitScale))));
-                        codes.Insert(i + 19, new CodeInstruction(OpCodes.Ldc_I4, which));
-                        SMonitor.Log("modifying fruit color");
-                        codes[i + 15].opcode = OpCodes.Ldarg_0;
-                        codes[i + 15].operand = null;
-                        codes.Insert(i + 16, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.GetFruitColor))));
-                        codes.Insert(i + 16, new CodeInstruction(OpCodes.Ldc_I4, which));
-                        which++;
-                    }*/
-					else if (i < codes.Count && codes[i+1].opcode == OpCodes.Ldc_R4 && (float)codes[i+1].operand == 0.0f && codes[i+3].opcode == OpCodes.Ldc_R4 && (float)codes[i+3].operand == 4.0f && codes[i+4].opcode == OpCodes.Ldc_I4_0)
+					else if (i < codes.Count && i > 2 && codes[i - 2].opcode == OpCodes.Ldloc_S && codes[i+1].opcode == OpCodes.Ldc_R4 && (float)codes[i+1].operand == 0.0f && codes[i+3].opcode == OpCodes.Ldc_R4 && (float)codes[i+3].operand == 4.0f && codes[i+4].opcode == OpCodes.Ldc_I4_0)
 					{
+						Log("modifying fruit color");
 						codes.RemoveAt(i);
-						codes.Insert(i, new CodeInstruction(OpCodes.Ldloc_S, 8));
-						codes.Insert(i, new CodeInstruction(OpCodes.Ldarg_0, null));
 						codes.Insert(i, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.GetFruitColor))));
-						codes.Insert(i, new CodeInstruction(OpCodes.Ldc_I4, which));
-						codes.RemoveAt(i + 3);
                         codes.Insert(i, new CodeInstruction(OpCodes.Ldloc_S, 8));
                         codes.Insert(i, new CodeInstruction(OpCodes.Ldarg_0, null));
-                        codes.Insert(i + 3, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.GetFruitScale))));
-						codes.Insert(i + 3, new CodeInstruction(OpCodes.Ldc_I4, which));
+                        which++;
 					}
-                    if (found1 && which >= 2)
+					else if (i < codes.Count && i > 8 && codes[i - 8].opcode == OpCodes.Ldloc_S && codes[i].opcode == OpCodes.Ldc_R4 && (float)codes[i].operand == 4.0f && codes[i+1].opcode == OpCodes.Ldc_I4_0 && codes[i+2].opcode == OpCodes.Ldloca_S)
+					{
+						Log("modifying fruit scale");
+                        codes.RemoveAt(i);
+                        codes.Insert(i, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.GetFruitScale))));
+                        codes.Insert(i, new CodeInstruction(OpCodes.Ldloc_S, 8));
+                        codes.Insert(i, new CodeInstruction(OpCodes.Ldarg_0, null));
+                    }
+                    if (found1 && which >= 2) // the which check is a little redundant since the condition checks ldc.i4.0 which only applies to the first 2 draws anyway, but ill allow it
                         break;
                 }
 
@@ -409,18 +398,18 @@ namespace FruitTreeTweaks
 		}
 
 
-		[HarmonyPatch(typeof(FruitTree), nameof(FruitTree.dayUpdate))] // aedenthorn
+		[HarmonyPatch(typeof(FruitTree), nameof(FruitTree.dayUpdate))] // aedenthorn & chiccen
         public class FruitTree_dayUpdate_Patch
         {
             public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
-                Log($"Transpiling FruitTree.dayUpdate");
+                Log($"Transpiling FruitTree.dayUpdate", LogLevel.Debug);
                 var codes = new List<CodeInstruction>(instructions);
                 for (int i = 0; i < codes.Count; i++)
                 {
                     if (i < codes.Count - 3 && codes[i].opcode == OpCodes.Ldfld && (FieldInfo)codes[i].operand == AccessTools.Field(typeof(FruitTree), nameof(FruitTree.daysUntilMature)) && codes[i + 3].opcode == OpCodes.Bgt_S)
                     {
-                        Log("replacing daysUntilMature value with method", LogLevel.Trace);
+                        Log("replacing daysUntilMature value with method", LogLevel.Debug);
                         codes.Insert(i + 3, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.ChangeDaysToMatureCheck))));
                     }
                 }
