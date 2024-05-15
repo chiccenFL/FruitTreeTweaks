@@ -110,6 +110,7 @@ namespace FruitTreeTweaks
                 setValue: value => Config.EnableMod = value
             );
             Log($"Mod enabled: {Config.EnableMod}", debugOnly: true);
+
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => I18n.CropsBlock(),
@@ -118,6 +119,7 @@ namespace FruitTreeTweaks
                 setValue: value => Config.CropsBlock = value
             );
             Log($"Crops block: {Config.CropsBlock}", debugOnly: true);
+
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => I18n.TreesBlock(),
@@ -126,6 +128,7 @@ namespace FruitTreeTweaks
                 setValue: value => Config.TreesBlock = value
             );
             Log($"Trees block: {Config.TreesBlock}", debugOnly: true);
+
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => I18n.ObjectsBlock(),
@@ -134,6 +137,7 @@ namespace FruitTreeTweaks
                 setValue: value => Config.ObjectsBlock = value
             );
             Log($"Objects block: {Config.ObjectsBlock}", debugOnly: true);
+
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => I18n.PlantAnywhere(),
@@ -142,15 +146,16 @@ namespace FruitTreeTweaks
                 setValue: value => Config.PlantAnywhere = value
             );
             Log($"Plant Anywhere: {Config.PlantAnywhere}", debugOnly: true);
-            /* future feature
+
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => I18n.PlantOnPaths(),
                 tooltip: () => I18n.PlantOnPaths_1(),
                 getValue: () => Config.PlantOnPaths,
                 setValue: value => Config.PlantOnPaths = value
-            );*/
+            );
             Log($"Plant On Paths: {Config.PlantOnPaths}", debugOnly: true);
+
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => I18n.FruitAllSeasons(),
@@ -158,7 +163,8 @@ namespace FruitTreeTweaks
                 getValue: () => Config.FruitAllSeasons,
                 setValue: value => Config.FruitAllSeasons = value
             );
-            Log($"Fruit All Seasons: {Config.FruitAllSeasons}", debugOnly: true);
+            Log($"Fruit All Seasons: {Config.FruitAllSeasons}", debugOnly: true); // plant on paths currently not working, so comment this out if you can't get it working
+
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => I18n.FruitInWinter(),
@@ -167,6 +173,7 @@ namespace FruitTreeTweaks
                 setValue: value => Config.FruitInWinter = value
             );
             Log($"Fruit In Winter: {Config.FruitInWinter}", debugOnly: true);
+
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => I18n.MaxFruitTree(),
@@ -174,6 +181,7 @@ namespace FruitTreeTweaks
                 setValue: value => Config.MaxFruitPerTree = value
             );
             Log($"Max Fruit / Tree: {Config.MaxFruitPerTree}", debugOnly: true);
+
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => I18n.DaysUntilMature(),
@@ -181,6 +189,7 @@ namespace FruitTreeTweaks
                 setValue: value => Config.DaysUntilMature = value
             );
             Log($"Days to Mature: {Config.DaysUntilMature}", debugOnly: true);
+
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => I18n.MinFruitDay(),
@@ -189,6 +198,7 @@ namespace FruitTreeTweaks
                 setValue: value => Config.MinFruitPerDay = value
             );
             Log($"Min Fruit / Day: {Config.MinFruitPerDay}", debugOnly: true);
+
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => I18n.MaxFruitDay(),
@@ -196,8 +206,9 @@ namespace FruitTreeTweaks
                 getValue: () => Config.MaxFruitPerDay,
                 setValue: value => Config.MaxFruitPerDay = value
             );
-            Log($"Max Fruit / Day: {Config.MaxFruitPerDay}", debugOnly: true);/*
-            configMenu.AddNumberOption(
+            Log($"Max Fruit / Day: {Config.MaxFruitPerDay}", debugOnly: true);
+            
+            configMenu.AddNumberOption( // just setting this comment here in case i need to comment this all out again and need to find where the first draw() option was lol
                 mod: ModManifest,
                 name: () => "Color Variation",
                 tooltip: () => "0 - 255, applied randomly to R, B, and G for each fruit, only applied cosmetically while on tree",
@@ -227,7 +238,8 @@ namespace FruitTreeTweaks
                 tooltip: () => "Top and bottom border on the canopy to limit fruit spawn locations",
                 getValue: () => Config.FruitSpawnBufferY,
                 setValue: value => Config.FruitSpawnBufferY = value
-            ); these last 4 are just out because FruitTree.draw_Patch isn't working right now anyway, so it's a bit silly being there when it does nothing atm. */
+            ); //these last 4 are just out because FruitTree.draw_Patch isn't working right now anyway, so it's a bit silly being there when it does nothing atm. */
+
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => I18n.DaysUntilSilver(),
@@ -236,6 +248,7 @@ namespace FruitTreeTweaks
                 setValue: value => Config.DaysUntilSilverFruit = value
             );
             Log($"Days until Silver: {Config.DaysUntilSilverFruit}", debugOnly: true);
+
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => I18n.DaysUntilGold(),
@@ -244,6 +257,7 @@ namespace FruitTreeTweaks
                 setValue: value => Config.DaysUntilGoldFruit = value
             );
             Log($"Days until Gold: {Config.DaysUntilGoldFruit}", debugOnly: true);
+
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => I18n.DaysUntilIridium(),
@@ -252,6 +266,7 @@ namespace FruitTreeTweaks
                 setValue: value => Config.DaysUntilIridiumFruit = value
             );
             Log($"Days until Iridium: {Config.DaysUntilIridiumFruit}", debugOnly: true);
+
             configMenu.AddBoolOption(
 				mod: ModManifest,
 				name: () => I18n.Debug(),

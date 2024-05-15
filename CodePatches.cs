@@ -109,7 +109,8 @@ namespace FruitTreeTweaks
         {
             public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
-                SMonitor.Log($"Transpiling FruitTree.draw");
+				if (!Config.EnableMod) return instructions;
+				SMonitor.Log($"Transpiling FruitTree.draw");
                 var codes = new List<CodeInstruction>(instructions);
                 bool found1 = false;
                 int which = 0;
@@ -137,7 +138,7 @@ namespace FruitTreeTweaks
                         codes.Insert(i + 16, new CodeInstruction(OpCodes.Ldc_I4, which));
                         which++;
                     }*/
-					else if (i < codes.Count && codes[i+1].opcode == OpCodes.Ldc_R4 && (float)codes[i+1].operand == 0.0f && codes[i+3].opcode == OpCodes.Ldc_R4 && (int)codes[i+3].operand == 4 && codes[i+4].opcode == OpCodes.Ldc_I4_0)
+					else if (i < codes.Count && codes[i+1].opcode == OpCodes.Ldc_R4 && (float)codes[i+1].operand == 0.0f && codes[i+3].opcode == OpCodes.Ldc_R4 && (float)codes[i+3].operand == 4.0f && codes[i+4].opcode == OpCodes.Ldc_I4_0)
 					{
 						codes.RemoveAt(i);
 						codes.Insert(i, new CodeInstruction(OpCodes.Ldloc_S, 8));
@@ -199,32 +200,6 @@ namespace FruitTreeTweaks
 		[HarmonyPatch(typeof(FruitTree), nameof(FruitTree.GetQuality))] // chiccen
 		public class FruitTree_GetQuality_Patch
 		{
-			/* Holding on to this for future use. It's easy to write but I don't want to memorize those damn op codes again.
-			public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-			{
-				Log("Transpiling FruitTree.GetQuality", LogLevel.Debug);
-				var codes = new List<CodeInstruction>(instructions);
-				for (int i = 0; i < codes.Count; i++)
-				{
-					if (codes[i].opcode == OpCodes.Ldc_I4_S && (sbyte)codes[i].operand == -112)
-					{
-						Log("replacing GetQuality with method");
-						codes.RemoveRange(i, codes.Count - i);
-
-						//codes.Insert(i, new CodeInstruction(OpCodes.Ldarg_0));
-						codes.Insert(i, new CodeInstruction(OpCodes.Ret));
-						codes.Insert(i, new CodeInstruction(OpCodes.Ldloc_0));
-						codes.Insert(i, new CodeInstruction(OpCodes.Stloc_0));
-						codes.Insert(i, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.QualityPatch))));
-
-						break;
-					}
-				}
-
-
-				return codes.AsEnumerable();
-			}
-			*/
 			public static bool Prefix(FruitTree __instance, ref int __result)
 			{
 				// __instance.stump.Value was used to remove quality from matured sapling, however I just found out this is not a bug but a new 1.6 feature.
@@ -296,7 +271,7 @@ namespace FruitTreeTweaks
 					string tileType = location.doesTileHaveProperty((int)placementTile.X, (int)placementTile.Y, "Type", "back");
 					Object tileObject = location.IsTileOccupiedBy(placementTile) ? location.getObjectAtTile((int)placementTile.X, (int)placementTile.Y) : null;
 					bool tileIsFree = tileObject is null ? true : (tileObject.IsFloorPathItem() && Config.PlantOnPaths);
-					Log($"tileIsFree: {tileIsFree}", LogLevel.Debug);
+					Log($"tileIsFree: {tileIsFree}", debugOnly: true);
 					if ((location is Farm || CanPlantAnywhere()) && (tileIsFree || Config.GodMode))
 					{
 
@@ -469,14 +444,14 @@ namespace FruitTreeTweaks
 			{
 				if (!Config.EnableMod) return instructions;
 
-				Log("Transpiling FruitTree.TryAddFruit");
+				Log("Transpiling FruitTree.TryAddFruit", LogLevel.Debug);
 				
 				var codes= new List<CodeInstruction>(instructions);
 				for (int i = 0; i < codes.Count; i++)
 				{
 					if (codes[i].opcode == OpCodes.Ldc_I4_3)
 					{
-						Log("replacing max fruit per tree with method");
+						Log("replacing max fruit per tree with method", LogLevel.Debug);
 						codes.Insert(i, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ModEntry), nameof(ModEntry.GetMaxFruit))));
 						codes.RemoveAt(i + 1);
 					}

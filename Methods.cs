@@ -55,37 +55,6 @@ namespace FruitTreeTweaks
             return GetFruitOffset(tree, index);
         }
 
-		public static int QualityPatch(int days)
-		{
-			/*
-			this method is only needed if using transpiler. currently using prefix, so no need for now but i will hold on to it
-			*/
-
-			if (days > -Config.DaysUntilIridiumFruit)
-			{
-				if (days > -Config.DaysUntilGoldFruit)
-				{
-					if (days > -Config.DaysUntilSilverFruit)
-					{
-						Log($"{days} is not old enough for Silver. Returning Base.", debugOnly: true);
-						return 0;
-					}
-					else {
-						Log($"{days} is older than -{Config.DaysUntilSilverFruit}! Returning 2", debugOnly: true);
-						return 1; 
-					}
-				}
-				else {
-					Log($"{days} is older than -{Config.DaysUntilGoldFruit}! Returning 3", debugOnly: true);
-					return 2; 
-				}
-			}
-			else {
-				Log($"{days} is older than -{Config.DaysUntilIridiumFruit}! Returning 4", debugOnly: true);
-				return 4;
-			}
-		}
-
         private static Vector2 GetFruitOffset(FruitTree tree, int index)
         {
             if (!fruitOffsets.TryGetValue(tree.Location, out Dictionary<Vector2, List<Vector2>> dict) || !dict.TryGetValue(Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key, out List<Vector2> offsets) || offsets.Count < tree.fruit.Count)
