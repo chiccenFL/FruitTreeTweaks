@@ -259,7 +259,7 @@ namespace FruitTreeTweaks
 					location.terrainFeatures.Remove(placementTile);
 					string tileType = location.doesTileHaveProperty((int)placementTile.X, (int)placementTile.Y, "Type", "back");
 					Object tileObject = location.IsTileOccupiedBy(placementTile) ? location.getObjectAtTile((int)placementTile.X, (int)placementTile.Y) : null;
-					bool tileIsFree = tileObject is null ? true : (tileObject.IsFloorPathItem() && Config.PlantOnPaths);
+					bool tileIsFree = tileObject is null || (tileObject.IsFloorPathItem() && Config.PlantOnPaths);
 					Log($"tileIsFree: {tileIsFree}", debugOnly: true);
 					if ((location is Farm || CanPlantAnywhere()) && ((tileIsFree && location.CanItemBePlacedHere(placementTile)) || Config.GodMode))
 					{
@@ -301,7 +301,7 @@ namespace FruitTreeTweaks
 					LogOnce($"{tree.DisplayName} CanPlantTreesHere: {l.CanPlantTreesHere(tree.ItemId, (int)tile.X, (int)tile.Y, out var deniedMessage2)}", debugOnly: true);
 
                     Object tileObject = l.IsTileOccupiedBy(tile) ? l.getObjectAtTile((int)tile.X, (int)tile.Y) : null;
-                    bool tileIsFree = tileObject is null ? true : (tileObject.IsFloorPathItem() && Config.PlantOnPaths);
+                    bool tileIsFree = tileObject is null || (tileObject.IsFloorPathItem() && Config.PlantOnPaths);
                     if ((l is not Farm && !CanPlantAnywhere()) || ((!tileIsFree || !l.CanItemBePlacedHere(tile)) && !Config.GodMode))
 					{
 						return true;
@@ -329,7 +329,7 @@ namespace FruitTreeTweaks
 					LogOnce($"{tree.DisplayName} CantPlantTreesHere: {l.CanPlantTreesHere(tree.ItemId, (int)tile.X, (int)tile.Y, out var deniedMessage2)}", debugOnly: true);
 
                     Object tileObject = l.IsTileOccupiedBy(tile) ? l.getObjectAtTile((int)tile.X, (int)tile.Y) : null;
-                    bool tileIsFree = tileObject is null ? true : (tileObject.IsFloorPathItem() && Config.PlantOnPaths);
+                    bool tileIsFree = tileObject is null || (tileObject.IsFloorPathItem() && Config.PlantOnPaths);
                     if ((l is not Farm && !CanPlantAnywhere()) || ((!tileIsFree || !l.CanItemBePlacedHere(tile)) && !Config.GodMode))
                     {
                         return true;
@@ -356,7 +356,7 @@ namespace FruitTreeTweaks
 					LogOnce($"{tree.DisplayName} CantPlantTreesHere: {l.CanPlantTreesHere(tree.ItemId, (int)tile.X, (int)tile.Y, out var deniedMessage2)}", debugOnly: true);
 
                     Object tileObject = l.IsTileOccupiedBy(tile) ? l.getObjectAtTile((int)tile.X, (int)tile.Y) : null;
-                    bool tileIsFree = tileObject is null ? true : (tileObject.IsFloorPathItem() && Config.PlantOnPaths);
+                    bool tileIsFree = tileObject is null || (tileObject.IsFloorPathItem() && Config.PlantOnPaths);
                     if ((l is not Farm && !CanPlantAnywhere()) || ((!tileIsFree || !l.CanItemBePlacedHere(tile)) && !Config.GodMode))
                     {
                         return true;
@@ -383,7 +383,7 @@ namespace FruitTreeTweaks
 					LogOnce($"{tree.DisplayName} CantPlantTreesHere: {l.CanPlantTreesHere(tree.ItemId, (int)tile.X, (int)tile.Y, out var deniedMessage2)}", debugOnly: true);
 
                     Object tileObject = l.IsTileOccupiedBy(tile) ? l.getObjectAtTile((int)tile.X, (int)tile.Y) : null;
-                    bool tileIsFree = tileObject is null ? true : (tileObject.IsFloorPathItem() && Config.PlantOnPaths);
+                    bool tileIsFree = tileObject is null || (tileObject.IsFloorPathItem() && Config.PlantOnPaths);
                     if ((l is not Farm && !CanPlantAnywhere()) || ((!tileIsFree || !l.CanItemBePlacedHere(tile)) && !Config.GodMode))
                     {
                         return true;
