@@ -9,6 +9,7 @@
     <None Remove="i18n\default.json" />
     <None Remove="PatchingNotes.txt" />
     <None Remove="Stardew-Valley.pdb" />
+    <None Remove="TO-DO.txt" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="i18n\default.json" />
