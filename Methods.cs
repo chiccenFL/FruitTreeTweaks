@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.TerrainFeatures;
+using StardewModdingAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,11 +27,28 @@ namespace FruitTreeTweaks
         }
         private static int GetMaxFruit()
         {
-			return !Config.EnableMod ? 3 : Math.Max(1, Config.MaxFruitPerTree);
+            return !Config.EnableMod ? 3 : Math.Max(1, Config.MaxFruitPerTree);
         }
         private static int GetFruitPerDay()
         {
             return !Config.EnableMod ? 1 : Game1.random.Next(Config.MinFruitPerDay, Math.Max(Config.MinFruitPerDay, Config.MaxFruitPerDay + 1));
+        }
+        private static int ChangeDaysToMatureCheck(int oldValue)
+        {
+            if (!Config.EnableMod)
+                return oldValue;
+            switch (oldValue)
+            {
+                case 0:
+                    return 0;
+                case 7:
+                    return Config.DaysUntilMature / 4;
+                case 14:
+                    return Config.DaysUntilMature / 2;
+                case 21:
+                    return Config.DaysUntilMature * 3 / 4;
+            }
+            return oldValue;
         }
         private static Color GetFruitColor(FruitTree tree, int index)
         {
@@ -58,25 +76,9 @@ namespace FruitTreeTweaks
         private static Vector2 GetFruitOffset(FruitTree tree, int index)
         {
             if (!fruitOffsets.TryGetValue(tree.Location, out Dictionary<Vector2, List<Vector2>> dict) || !dict.TryGetValue(Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key, out List<Vector2> offsets) || offsets.Count < tree.fruit.Count)
+                Log($"", LogLevel.Alert);
                 ReloadFruit(tree.Location, Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key, tree.fruit.Count);
             return fruitOffsets[tree.Location][Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key][index];
-        }
-        private static int ChangeDaysToMatureCheck(int oldValue)
-        {
-            if (!Config.EnableMod)
-                return oldValue;
-            switch (oldValue)
-            {
-                case 0:
-                    return 0;
-                case 7:
-                    return Config.DaysUntilMature / 4;
-                case 14:
-                    return Config.DaysUntilMature / 2;
-                case 21:
-                    return Config.DaysUntilMature * 3 / 4;
-            }
-            return oldValue;
         }
 
         private static void ReloadFruit(GameLocation location, Vector2 tileLocation, int max)

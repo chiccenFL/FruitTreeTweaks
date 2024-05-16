@@ -1,12 +1,6 @@
 ﻿using HarmonyLib;
-using StardewValley;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
-using System;
-using System.Collections;
-using System.Security.Cryptography.X509Certificates;
-using System.Linq;
-using StardewValley.ItemTypeDefinitions;
 
 /***
  * TO DO:
@@ -26,7 +20,7 @@ namespace FruitTreeTweaks
         public static ModEntry context;
 
         private static int attempts = 0;
-		
+
 
         /// <summary>The mod entry point, called after the mod is first loaded.</summary>
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
@@ -61,12 +55,12 @@ namespace FruitTreeTweaks
 		/// <param name="level"></param>
 
         public static void Log(string message, LogLevel level = LogLevel.Trace, bool debugOnly = false)
-		{
-			level = Config.Debug ? LogLevel.Debug : level;
-            if (!debugOnly) SMonitor.Log(message, level); 
+        {
+            level = Config.Debug ? LogLevel.Debug : level;
+            if (!debugOnly) SMonitor.Log(message, level);
             else if (debugOnly && Config.Debug) SMonitor.Log(message, level);
             else return;
-		}
+        }
 
         /// <summary>
 		///     Small method that handles Debug mode to make SMAPI logs a bit easier to read.
@@ -79,14 +73,14 @@ namespace FruitTreeTweaks
 		/// <param name="message"></param>
 		/// <param name="level"></param>
 		public static void LogOnce(string message, LogLevel level = LogLevel.Trace, bool debugOnly = false)
-		{
+        {
             level = Config.Debug ? LogLevel.Debug : level;
             if (!debugOnly) SMonitor.LogOnce(message, level);
             if (debugOnly && Config.Debug) SMonitor.LogOnce(message, level);
             else return;
         }
 
-		private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
+        private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
         {
 
             Log("Fruit Tree Tweaks launching with Debug enabled.", debugOnly: true);
@@ -114,7 +108,7 @@ namespace FruitTreeTweaks
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => I18n.CropsBlock(),
-				tooltip: () => I18n.CropsBlock_1(),
+                tooltip: () => I18n.CropsBlock_1(),
                 getValue: () => Config.CropsBlock,
                 setValue: value => Config.CropsBlock = value
             );
@@ -123,7 +117,7 @@ namespace FruitTreeTweaks
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => I18n.TreesBlock(),
-				tooltip: () => I18n.TreesBlock_1(),
+                tooltip: () => I18n.TreesBlock_1(),
                 getValue: () => Config.TreesBlock,
                 setValue: value => Config.TreesBlock = value
             );
@@ -132,7 +126,7 @@ namespace FruitTreeTweaks
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => I18n.ObjectsBlock(),
-				tooltip: () => I18n.ObjectsBlock_1(),
+                tooltip: () => I18n.ObjectsBlock_1(),
                 getValue: () => Config.ObjectsBlock,
                 setValue: value => Config.ObjectsBlock = value
             );
@@ -236,12 +230,12 @@ namespace FruitTreeTweaks
             Log($"Days until Iridium: {Config.DaysUntilIridiumFruit}", debugOnly: true);
 
             configMenu.AddBoolOption(
-				mod: ModManifest,
-				name: () => I18n.Debug(),
-				tooltip: () => I18n.Debug_1(),
-				getValue: () => Config.Debug,
-				setValue: value => Config.Debug = value
-			);
+                mod: ModManifest,
+                name: () => I18n.Debug(),
+                tooltip: () => I18n.Debug_1(),
+                getValue: () => Config.Debug,
+                setValue: value => Config.Debug = value
+            );
             Log($"Debug: Well you're reading this, aren't you?", debugOnly: true); // xaxaxa
             /* future feature
             configMenu.AddBoolOption(
