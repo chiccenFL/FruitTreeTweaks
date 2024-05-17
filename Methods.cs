@@ -10,9 +10,9 @@ namespace FruitTreeTweaks
 {
     public partial class ModEntry
     {
-        private static Dictionary<GameLocation, Dictionary<Vector2, List<Vector2>>> fruitOffsets = new Dictionary<GameLocation, Dictionary<Vector2, List<Vector2>>>();
-        private static Dictionary<GameLocation, Dictionary<Vector2, List<Color>>> fruitColors = new Dictionary<GameLocation, Dictionary<Vector2, List<Color>>>();
-        private static Dictionary<GameLocation, Dictionary<Vector2, List<float>>> fruitSizes = new Dictionary<GameLocation, Dictionary<Vector2, List<float>>>();
+        private static Dictionary<GameLocation, Dictionary<Vector2, List<Vector2>>> fruitOffsets = new();
+        private static Dictionary<GameLocation, Dictionary<Vector2, List<Color>>> fruitColors = new();
+        private static Dictionary<GameLocation, Dictionary<Vector2, List<float>>> fruitSizes = new();
         private static int fruitToday;
 
         private static float GetTreeBottomOffset(FruitTree tree)
@@ -54,8 +54,8 @@ namespace FruitTreeTweaks
         {
             if (!Config.EnableMod)
                 return Color.White;
-            if (!fruitColors.TryGetValue(tree.Location, out Dictionary<Vector2, List<Color>> dict) || !dict.TryGetValue(Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key, out List<Color> colors) || colors.Count < tree.fruit.Count)
-                ReloadFruit(tree.Location, Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key, tree.fruit.Count);
+            if (!fruitColors.TryGetValue(tree.Location, out Dictionary<Vector2, List<Color>> dict) || !dict.TryGetValue(tree.Tile, out List<Color> colors) || colors.Count < tree.fruit.Count)
+                ReloadFruit(tree.Location, tree.Tile, tree.fruit.Count);
             return fruitColors[tree.Location][Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key][index];
         }
         private static float GetFruitScale(FruitTree tree, int index)
@@ -76,7 +76,6 @@ namespace FruitTreeTweaks
         private static Vector2 GetFruitOffset(FruitTree tree, int index)
         {
             if (!fruitOffsets.TryGetValue(tree.Location, out Dictionary<Vector2, List<Vector2>> dict) || !dict.TryGetValue(Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key, out List<Vector2> offsets) || offsets.Count < tree.fruit.Count)
-                Log($"", LogLevel.Alert);
                 ReloadFruit(tree.Location, Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key, tree.fruit.Count);
             return fruitOffsets[tree.Location][Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key][index];
         }
