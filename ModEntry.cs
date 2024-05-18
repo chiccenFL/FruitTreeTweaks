@@ -184,6 +184,15 @@ namespace FruitTreeTweaks
             );
             Log($"Days to Mature: {Config.DaysUntilMature}", debugOnly: true);
 
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => I18n.SaplingMaturity(),
+                tooltip: () => I18n.SaplingMaturity_1(),
+                getValue: () => Config.UseBaseSaplingMaturity,
+                setValue: value => Config.UseBaseSaplingMaturity = value
+            );
+            Log($"Use Base Sapling Maturity: {Config.UseBaseSaplingMaturity}", debugOnly: true);
+
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => I18n.MinFruitDay(),
@@ -266,7 +275,8 @@ namespace FruitTreeTweaks
                 getValue: () => Config.ColorVariation,
                 setValue: value => Config.ColorVariation = value
             );
-            Log($"Color Variation: {Config.EnableMod}", debugOnly: true);
+            Log($"Color Variation: {Config.ColorVariation}", debugOnly: true);
+
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => I18n.SizeVar(),
@@ -276,6 +286,8 @@ namespace FruitTreeTweaks
                 min: 0,
                 max: 99
             );
+            Log($"Size Variation: {Config.SizeVariation}", debugOnly: true);
+
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => I18n.BufferX(),
@@ -283,6 +295,8 @@ namespace FruitTreeTweaks
                 getValue: () => Config.FruitSpawnBufferX,
                 setValue: value => Config.FruitSpawnBufferX = value
             );
+            Log($"Fruit Buffer X: {Config.FruitSpawnBufferX}", debugOnly: true);
+
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => I18n.BufferY(),
@@ -290,6 +304,7 @@ namespace FruitTreeTweaks
                 getValue: () => Config.FruitSpawnBufferY,
                 setValue: value => Config.FruitSpawnBufferY = value
             );
+            Log($"Fruit Buffer Y: {Config.FruitSpawnBufferY}", debugOnly: true);
         }
 
         private void GameLoop_SaveLoaded(object sender, SaveLoadedEventArgs e)

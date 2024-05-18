@@ -16,6 +16,8 @@
   "FruitInWinter.1": "Expands Fruit All Seasons to include Winter. Fruit All Seasons must be enabled.",
   "MaxFruitTree": "Max Fruit / Tree",
   "DaysUntilMature": "Days to Mature",
+  "SaplingMaturity": "Use Base Sapling Maturity",
+  "SaplingMaturity.1": "Enable to use vanilla Days to Mature value for sapling of silver+ quality",
   "MinFruitDay": "Min Fruit Per Day",
   "MinFruitDay.1": "For a specific number of fruit/day, set this value to match Max Fruit Per Day",
   "MaxFruitDay": "Max Fruit Per Day",
