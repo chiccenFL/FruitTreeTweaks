@@ -26,7 +26,7 @@ namespace FruitTreeTweaks
             {
                 if (!Config.EnableMod)
                     return;
-                __instance.daysUntilMature.Value = Config.DaysUntilMature;
+                __instance.daysUntilMature.Value = Math.Min(Config.DaysUntilMature, __instance.daysUntilMature.Value);
                 SMonitor.Log($"New fruit tree: set days until mature to {Config.DaysUntilMature}");
             }
         }
@@ -38,7 +38,7 @@ namespace FruitTreeTweaks
             {
                 if (!Config.EnableMod)
                     return;
-                __instance.daysUntilMature.Value = Config.DaysUntilMature;
+                __instance.daysUntilMature.Value = Math.Min(Config.DaysUntilMature, __instance.daysUntilMature.Value);
                 SMonitor.Log($"New fruit tree: set days until mature to {Config.DaysUntilMature}");
             }
         }
@@ -48,12 +48,6 @@ namespace FruitTreeTweaks
         {
             public static bool Prefix(ref bool __result)
             {
-                /*
-				if (!Config.EnableMod || !Config.FruitAllSeasons)
-                    return true;
-                __result = !Game1.IsWinter;
-                return false;
-				*/
                 __result = (Config.EnableMod && Config.FruitAllSeasons && (!Game1.IsWinter || Config.FruitInWinter));
                 return !__result;
             }
@@ -230,7 +224,7 @@ namespace FruitTreeTweaks
         {
             public static bool Prefix(GameLocation location, int x, int y, ref bool __result, Farmer who = null)
             {
-                if (location is not Farm && !Config.PlantAnywhere) return true;
+                if (location is not Farm && !Config.PlantAnywhere || location.Name == "EastScarp_Orchard") return true;
 
                 if (who?.CurrentItem?.GetItemTypeId() is not "(O)") return true;
 
