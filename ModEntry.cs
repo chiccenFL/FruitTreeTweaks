@@ -183,7 +183,7 @@ namespace FruitTreeTweaks
                 setValue: value => Config.DaysUntilMature = value
             );
             Log($"Days to Mature: {Config.DaysUntilMature}", debugOnly: true);
-
+            /* future feature? maybe?
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => I18n.SaplingMaturity(),
@@ -191,7 +191,7 @@ namespace FruitTreeTweaks
                 getValue: () => Config.UseBaseSaplingMaturity,
                 setValue: value => Config.UseBaseSaplingMaturity = value
             );
-            Log($"Use Base Sapling Maturity: {Config.UseBaseSaplingMaturity}", debugOnly: true);
+            Log($"Use Base Sapling Maturity: {Config.UseBaseSaplingMaturity}", debugOnly: true);*/
 
             configMenu.AddNumberOption(
                 mod: ModManifest,
