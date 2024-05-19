@@ -2,8 +2,7 @@
 
 ### [Original mod](https://www.nexusmods.com/stardewvalley/mods/11422) created by [aedenthorn](https://next.nexusmods.com/profile/aedenthorn/about-me)
 
-This update doesn't change much from the original, it primarily brings the mod up to date with Stardew Valley version 1.6.  
-Some features that broke with 1.6 are still missing and being worked on. This update is a work in progress, and those features will return eventually.  
+This update doesn't change much from the original, it primarily brings the mod up to date with Stardew Valley version 1.6.   
 If I broke something, let me know by submitting a bug report or reaching on Discord (@chiccen). You are also free to contribute to the [Github](https://github.com/chiccenFL/FruitTreeTweaks/tree/main).  
 If making a bug report on Nexus, please use the ["Bugs"](https://www.nexusmods.com/stardewvalley/mods/21449/?tab=bugs) tab and ***not*** "Posts" unless it is a suggestion, a mod conflict, or a very very minor bug.  
 
