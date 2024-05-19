@@ -10,9 +10,7 @@ namespace FruitTreeTweaks
 {
     public partial class ModEntry
     {
-        private static Dictionary<GameLocation, Dictionary<Vector2, List<Vector2>>> fruitOffsets = new();
-        private static Dictionary<GameLocation, Dictionary<Vector2, List<Color>>> fruitColors = new();
-        private static Dictionary<GameLocation, Dictionary<Vector2, List<float>>> fruitSizes = new();
+        private static Dictionary<GameLocation, (List<Color> colors, List<float> sizes, List<Vector2> offsets)> fruitData = new();
         private static int fruitToday;
 
         private static float GetTreeBottomOffset(FruitTree tree)
@@ -54,17 +52,23 @@ namespace FruitTreeTweaks
         {
             if (!Config.EnableMod)
                 return Color.White;
-            if (!fruitColors.TryGetValue(tree.Location, out Dictionary<Vector2, List<Color>> dict) || !dict.TryGetValue(tree.Tile, out List<Color> colors) || colors.Count < tree.fruit.Count)
-                ReloadFruit(tree.Location, tree.Tile, tree.fruit.Count);
-            return fruitColors[tree.Location][Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key][index];
+            if (!fruitData.TryGetValue(tree.Location, out var data) || data.colors.Count < tree.fruit.Count)
+            {
+                ReloadFruit(tree.Location, tree.fruit.Count);
+                fruitData.TryGetValue(tree.Location, out data);
+            }
+            return data.colors[index];
         }
         private static float GetFruitScale(FruitTree tree, int index)
         {
             if (!Config.EnableMod)
                 return 4;
-            if (!fruitSizes.TryGetValue(tree.Location, out Dictionary<Vector2, List<float>> dict) || !dict.TryGetValue(Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key, out List<float> sizes) || sizes.Count < tree.fruit.Count)
-                ReloadFruit(tree.Location, Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key, tree.fruit.Count);
-            return fruitSizes[tree.Location][Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key][index];
+            if (!fruitData.TryGetValue(tree.Location, out var data) || data.sizes.Count < tree.fruit.Count)
+            {
+                ReloadFruit(tree.Location, tree.fruit.Count);
+                fruitData.TryGetValue(tree.Location, out data);
+            }
+            return data.sizes[index];
         }
         private static Vector2 GetFruitOffsetForShake(FruitTree tree, int index)
         {
@@ -75,53 +79,56 @@ namespace FruitTreeTweaks
 
         private static Vector2 GetFruitOffset(FruitTree tree, int index)
         {
-            if (!fruitOffsets.TryGetValue(tree.Location, out Dictionary<Vector2, List<Vector2>> dict) || !dict.TryGetValue(Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key, out List<Vector2> offsets) || offsets.Count < tree.fruit.Count)
-                ReloadFruit(tree.Location, Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key, tree.fruit.Count);
-            return fruitOffsets[tree.Location][Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == tree).Key][index];
+            if (!fruitData.TryGetValue(tree.Location, out var data) || data.offsets.Count < tree.fruit.Count)
+            {
+                ReloadFruit(tree.Location, tree.fruit.Count);
+                fruitData.TryGetValue(tree.Location, out data);
+            }
+            return data.offsets[index];
         }
 
-        private static void ReloadFruit(GameLocation location, Vector2 tileLocation, int max)
+        private static void ReloadFruit(GameLocation location, int max)
         {
-            if (!fruitOffsets.ContainsKey(location))
-                fruitOffsets.Add(location, new Dictionary<Vector2, List<Vector2>>());
-            if (!fruitOffsets[location].TryGetValue(tileLocation, out List<Vector2> offsets))
+            // init fruit data
+            if (!fruitData.ContainsKey(location))
             {
-                offsets = new List<Vector2>();
-                fruitOffsets[location][tileLocation] = offsets;
+                fruitData.Add(location, (new List<Color>(), new List<float>(), new List<Vector2>()));
             }
-            if (!fruitColors.ContainsKey(location))
-                fruitColors.Add(location, new Dictionary<Vector2, List<Color>>());
-            if (!fruitColors[location].TryGetValue(tileLocation, out List<Color> colors))
+            fruitData.TryGetValue(location, out var data);
+
+            // fruit colors
+            if (data.colors.Count < max)
             {
-                colors = new List<Color>();
-                fruitColors[location][tileLocation] = colors;
-            }
-            if (!fruitSizes.ContainsKey(location))
-                fruitSizes.Add(location, new Dictionary<Vector2, List<float>>());
-            if (!fruitSizes[location].TryGetValue(tileLocation, out List<float> sizes))
-            {
-                sizes = new List<float>();
-                fruitSizes[location][tileLocation] = sizes;
-            }
-            if (offsets.Count != max)
-            {
-                offsets.Clear();
-                colors.Clear();
-                sizes.Clear();
-                SMonitor.Log($"Resetting fruit offsets for {tileLocation} in {location.Name}");
+                data.colors.Clear();
                 for (int i = 0; i < max; i++)
                 {
                     var color = Color.White;
                     color.R -= (byte)(Game1.random.NextDouble() * Config.ColorVariation);
                     color.G -= (byte)(Game1.random.NextDouble() * Config.ColorVariation);
                     color.B -= (byte)(Game1.random.NextDouble() * Config.ColorVariation);
-                    colors.Add(color);
-
-                    sizes.Add(4 * (float)(1 + ((Game1.random.NextDouble() * 2 - 1) * Config.SizeVariation / 100)));
+                    data.colors.Add(color);
+                }
+            }
+            // fruit sizes
+            if (data.sizes.Count < max)
+            {
+                data.sizes.Clear();
+                for (int i = 0; i < max; i++)
+                {
+                    data.sizes.Add(4 * (float)(1 + ((Game1.random.NextDouble() * 2 - 1) * Config.SizeVariation / 100)));
+                }
+            }
+            // fruit offsets
+            if (data.offsets.Count != max)
+            {
+                data.offsets.Clear();
+                SMonitor.Log($"Resetting fruit offsets in {location.Name}");
+                for (int i = 0; i < max; i++)
+                {
 
                     if (i < 3)
                     {
-                        offsets.Add(Vector2.Zero);
+                        data.offsets.Add(Vector2.Zero);
                         continue;
                     }
                     bool gotSpot = false;
@@ -133,9 +140,9 @@ namespace FruitTreeTweaks
                         {
                             gotSpot = true;
                             offset = new Vector2(Config.FruitSpawnBufferX + Game1.random.Next(34 * 4 - Config.FruitSpawnBufferX), Config.FruitSpawnBufferY + Game1.random.Next(58 * 4 - Config.FruitSpawnBufferY));
-                            for (int k = 0; k < offsets.Count; k++)
+                            for (int k = 0; k < data.offsets.Count; k++)
                             {
-                                if (Vector2.Distance(offsets[k], offset) < distance)
+                                if (Vector2.Distance(data.offsets[k], offset) < distance)
                                 {
                                     distance--;
                                     gotSpot = false;
@@ -144,7 +151,7 @@ namespace FruitTreeTweaks
                             }
                             if (gotSpot)
                             {
-                                offsets.Add(offset);
+                                data.offsets.Add(offset);
                                 break;
                             }
                         }
