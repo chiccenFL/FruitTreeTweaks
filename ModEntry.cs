@@ -49,7 +49,7 @@ namespace FruitTreeTweaks
         /// <remarks>
         ///     Allows basic Log functions to upgrade Logs to <see cref="LogLevel.Debug"/>, excluding <see cref="LogLevel.Error"/>, when debugging for ease of reading.<br/>
         ///     For <b>Debug Only</b> Logs -- use <c>debugOnly: true</c> and omit <see cref="LogLevel"/> -- <code>Log(message, debugOnly: true);</code><br/>
-        ///     For Debug Logs that <b>always</b> show -- use <see cref="LogLevel"/> and omit <c>debugOnly</c> -- <code>Log(message, LogLevel)</code>.
+        ///     For Debug Logs that <b>always</b> show -- use <see cref="LogLevel"/> and omit <c>debugOnly</c> -- <code>Log(message, <see cref="LogLevel"/>)</code>.
         /// </remarks>
 		/// <param name="message"></param>
 		/// <param name="level"></param>
