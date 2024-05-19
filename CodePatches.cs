@@ -134,12 +134,12 @@ namespace FruitTreeTweaks
             }
             public static void Postfix(FruitTree __instance, SpriteBatch spriteBatch)
             {
-                if (!Config.EnableMod || __instance.fruit.Count <= 3 || __instance.growthStage.Value < 4 || !fruitColors.TryGetValue(Game1.currentLocation, out Dictionary<Vector2, List<Color>> colors))
+                if (!Config.EnableMod || __instance.fruit.Count <= 3 || __instance.growthStage.Value < 4 || !fruitData.TryGetValue(Game1.currentLocation, out var data))
                     return;
                 for (int i = 3; i < __instance.fruit.Count; i++)
                 {
                     Vector2 offset = GetFruitOffset(__instance, i);
-                    Color color = colors[Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == __instance).Key][i];
+                    Color color = data.colors[i];
 
 
                     spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == __instance).Key * 64 - new Vector2(16, 80) * 4 + offset), new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, (__instance.struckByLightningCountdown.Value > 0) ? 383 : ItemRegistry.GetDataOrErrorItem(__instance.fruit[0].ItemId).SpriteIndex, 16, 16)), color, 0f, Vector2.Zero, GetFruitScale(__instance, i), SpriteEffects.None, (float)__instance.getBoundingBox().Bottom / 10000f + 0.002f - Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == __instance).Key.X / 1000000f + i / 100000f);
