@@ -18,7 +18,7 @@ namespace FruitTreeTweaks
 {
     public partial class ModEntry
     {
-        [HarmonyPatch(typeof(FruitTree), new Type[] { typeof(string), typeof(int) })] // aedenthorn
+        [HarmonyPatch(typeof(FruitTree), new Type[] { typeof(string), typeof(int) })] // aedenthorn & chiccen
         [HarmonyPatch(MethodType.Constructor)]
         public class FruitTree__Patch1
         {
@@ -30,7 +30,7 @@ namespace FruitTreeTweaks
                 SMonitor.Log($"New fruit tree: set days until mature to {Config.DaysUntilMature}");
             }
         }
-        [HarmonyPatch(typeof(FruitTree), new Type[] { typeof(string), typeof(int) })] // aedenthorn
+        [HarmonyPatch(typeof(FruitTree), new Type[] { typeof(string), typeof(int) })] // aedenthorn & chiccen
         [HarmonyPatch(MethodType.Constructor)]
         public class FruitTree__Patch2
         {
@@ -43,7 +43,7 @@ namespace FruitTreeTweaks
             }
         }
 
-        [HarmonyPatch(typeof(FruitTree), nameof(FruitTree.IsInSeasonHere))] // aedenthorn
+        [HarmonyPatch(typeof(FruitTree), nameof(FruitTree.IsInSeasonHere))] // chiccen
         public class FruitTree_IsInSeasonHere_Patch
         {
             public static bool Prefix(ref bool __result)
@@ -148,7 +148,7 @@ namespace FruitTreeTweaks
             }
         }
 
-        [HarmonyPatch(typeof(FruitTree), nameof(FruitTree.shake))] // aedenthorn
+        [HarmonyPatch(typeof(FruitTree), nameof(FruitTree.shake))] // aedenthorn & chiccen
         public class FruitTree_shake_Patch
         {
             [MethodImpl(MethodImplOptions.NoInlining)]
