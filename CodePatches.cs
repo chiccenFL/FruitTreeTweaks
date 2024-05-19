@@ -24,7 +24,7 @@ namespace FruitTreeTweaks
         {
             public static void Postfix(FruitTree __instance)
             {
-                if (!Config.EnableMod)
+                if (!Config.EnableMod && __instance.daysUntilMature.Value != Config.DaysUntilMature)
                     return;
                 __instance.daysUntilMature.Value = Math.Min(Config.DaysUntilMature, __instance.daysUntilMature.Value);
                 SMonitor.Log($"New fruit tree: set days until mature to {Config.DaysUntilMature}");
@@ -36,7 +36,7 @@ namespace FruitTreeTweaks
         {
             public static void Postfix(FruitTree __instance)
             {
-                if (!Config.EnableMod)
+                if (!Config.EnableMod && __instance.daysUntilMature.Value != Config.DaysUntilMature)
                     return;
                 __instance.daysUntilMature.Value = Math.Min(Config.DaysUntilMature, __instance.daysUntilMature.Value);
                 SMonitor.Log($"New fruit tree: set days until mature to {Config.DaysUntilMature}");
