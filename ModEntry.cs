@@ -2,12 +2,6 @@
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 
-/***
- * TO DO:
- * Fix draw so you can see more than 3 fruit
- * For fun: see if you can change it so trees can be placed on top of paths
-***/
-
 namespace FruitTreeTweaks
 {
     /// <summary>The mod entry point.</summary>
