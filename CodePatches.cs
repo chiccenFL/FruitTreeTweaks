@@ -146,6 +146,7 @@ namespace FruitTreeTweaks
                     ParsedItemData fruit = (((int)__instance.struckByLightningCountdown > 0) ? ItemRegistry.GetDataOrErrorItem("(O)382") : ItemRegistry.GetDataOrErrorItem(__instance.fruit[i].QualifiedItemId));
                     Texture2D texture = fruit.GetTexture();
                     Rectangle sourceRect = fruit.GetSourceRect();
+                    Log($"Drawing texture from {fruit.TextureName} for {fruit.InternalName}", debugOnly: true);
                     spriteBatch.Draw(texture, Game1.GlobalToLocal(Game1.viewport, tileLocation * 64f - new Vector2(16, 80) * 4 + offset), sourceRect, color, 0f, Vector2.Zero, GetFruitScale(__instance, i), SpriteEffects.None, (float)__instance.getBoundingBox().Bottom / 10000f + 0.002f - tileLocation.X / 1000000f + i / 100000f);
 
                 }
