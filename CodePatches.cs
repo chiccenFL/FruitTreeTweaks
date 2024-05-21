@@ -3,6 +3,7 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
+using StardewValley.ItemTypeDefinitions;
 using StardewValley.TerrainFeatures;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace FruitTreeTweaks
                 if (!Config.EnableMod && __instance.daysUntilMature.Value != Config.DaysUntilMature)
                     return;
                 __instance.daysUntilMature.Value = Math.Min(Config.DaysUntilMature, __instance.daysUntilMature.Value);
-                SMonitor.Log($"New fruit tree: set days until mature to {Config.DaysUntilMature}");
+                Log($"New fruit tree: set days until mature to {Config.DaysUntilMature}", debugOnly: true);
             }
         }
         [HarmonyPatch(typeof(FruitTree), new Type[] { typeof(string), typeof(int) })] // aedenthorn & chiccen
@@ -39,7 +40,7 @@ namespace FruitTreeTweaks
                 if (!Config.EnableMod && __instance.daysUntilMature.Value != Config.DaysUntilMature)
                     return;
                 __instance.daysUntilMature.Value = Math.Min(Config.DaysUntilMature, __instance.daysUntilMature.Value);
-                SMonitor.Log($"New fruit tree: set days until mature to {Config.DaysUntilMature}");
+                Log($"New fruit tree: set days until mature to {Config.DaysUntilMature}", debugOnly: true);
             }
         }
 
@@ -139,10 +140,13 @@ namespace FruitTreeTweaks
                 for (int i = 3; i < __instance.fruit.Count; i++)
                 {
                     Vector2 offset = GetFruitOffset(__instance, i);
+                    Vector2 tileLocation = __instance.Tile;
                     Color color = data.colors[i];
 
-
-                    spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == __instance).Key * 64 - new Vector2(16, 80) * 4 + offset), new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, (__instance.struckByLightningCountdown.Value > 0) ? 383 : ItemRegistry.GetDataOrErrorItem(__instance.fruit[0].ItemId).SpriteIndex, 16, 16)), color, 0f, Vector2.Zero, GetFruitScale(__instance, i), SpriteEffects.None, (float)__instance.getBoundingBox().Bottom / 10000f + 0.002f - Game1.getFarm().terrainFeatures.Pairs.FirstOrDefault(pair => pair.Value == __instance).Key.X / 1000000f + i / 100000f);
+                    ParsedItemData fruit = (((int)__instance.struckByLightningCountdown > 0) ? ItemRegistry.GetDataOrErrorItem("(O)382") : ItemRegistry.GetDataOrErrorItem(__instance.fruit[i].QualifiedItemId));
+                    Texture2D texture = fruit.GetTexture();
+                    Rectangle sourceRect = fruit.GetSourceRect();
+                    spriteBatch.Draw(texture, Game1.GlobalToLocal(Game1.viewport, tileLocation * 64f - new Vector2(16, 80) * 4 + offset), sourceRect, color, 0f, Vector2.Zero, GetFruitScale(__instance, i), SpriteEffects.None, (float)__instance.getBoundingBox().Bottom / 10000f + 0.002f - tileLocation.X / 1000000f + i / 100000f);
 
                 }
             }
